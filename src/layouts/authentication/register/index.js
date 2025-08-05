@@ -26,8 +26,8 @@ function Cover() {
 
   return (
     <CoverLayout
-      title="Join us today"
-      description="Enter your email and password to register"
+      title="Rejestracja w Saldo Planer"
+      description="Wprowadź swoje dany aby się zarejestrować"
       image={curved11}
       top={12}
     >
@@ -35,10 +35,10 @@ function Cover() {
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Name
+              Nazwa
             </SoftTypography>
           </SoftBox>
-          <SoftInput placeholder="Name" />
+          <SoftInput placeholder="Nazwa" />
         </SoftBox>
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
@@ -51,10 +51,10 @@ function Cover() {
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Password
+              Hasło
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="Password" />
+          <SoftInput type="password" placeholder="Hasło" />
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Checkbox checked={agreement} onChange={handleSetAgremment} />
@@ -64,20 +64,20 @@ function Cover() {
             onClick={handleSetAgremment}
             sx={{ cursor: "pointer", userSelect: "none" }}
           >
-            &nbsp;&nbsp;I agree the&nbsp;
+            &nbsp;&nbsp;Akceptuję&nbsp;
           </SoftTypography>
           <SoftTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
-            Terms and Conditions
+            Regulamin
           </SoftTypography>
         </SoftBox>
         <SoftBox mt={4} mb={1}>
           <SoftButton variant="gradient" color="info" fullWidth>
-            sign up
+            Zarejestruj się
           </SoftButton>
         </SoftBox>
         <SoftBox mt={3} textAlign="center">
           <SoftTypography variant="button" color="text" fontWeight="regular">
-            Already have an account?&nbsp;
+            Masz już konto?&nbsp;
             <SoftTypography
               component={Link}
               to="/authentication/sign-in/cover"
@@ -86,7 +86,7 @@ function Cover() {
               fontWeight="medium"
               textGradient
             >
-              Sign in
+              Zaloguj się
             </SoftTypography>
           </SoftTypography>
         </SoftBox>

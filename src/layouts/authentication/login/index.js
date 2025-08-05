@@ -20,7 +20,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import curved9 from "assets/images/curved-images/curved9.jpg";
 
 function Cover() {
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
@@ -45,7 +45,7 @@ function Cover() {
               Hasło
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="Password" />
+          <SoftInput type="password" placeholder="Hasło" />
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -55,7 +55,7 @@ function Cover() {
             onClick={handleSetRememberMe}
             sx={{ cursor: "pointer", userSelect: "none" }}
           >
-            &nbsp;&nbsp;Remember me
+            &nbsp;&nbsp;Zapamiętaj mnie
           </SoftTypography>
         </SoftBox>
         <SoftBox mt={4} mb={1}>
@@ -68,7 +68,7 @@ function Cover() {
             Nie masz jeszcze konta?{" "}
             <SoftTypography
               component={Link}
-              to="/authentication/sign-up/cover"
+              to="/authentication/register"
               variant="button"
               color="info"
               fontWeight="medium"
