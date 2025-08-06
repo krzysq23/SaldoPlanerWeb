@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import routes from "./config/routes";
+import routes from "./routes/routes";
 
 // Soft UI Dashboard PRO React example components
-import Sidenav from "elements/Sidenav";
-import Configurator from "elements/Configurator";
+import Sidenav from "layouts/Sidenav";
+import Configurator from "layouts/Configurator";
 
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
