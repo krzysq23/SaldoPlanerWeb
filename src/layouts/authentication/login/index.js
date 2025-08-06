@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -19,25 +19,47 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import curved9 from "assets/images/curved-images/curved9.jpg";
 
-function Cover() {
+function Login() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (login === "admin" && password === "admin") {
+      localStorage.setItem("auth", "true");
+
+      navigate("/dashboard");
+    } else {
+      alert("Nieprawidłowy email lub hasło.");
+    }
+  };
+
   return (
     <CoverLayout
       title="Logowanie do Saldo Planer"
-      description="Wprowadź email i hasło aby się zalogować."
+      description="Wprowadź login i hasło aby się zalogować."
       image={curved9}
     >
-      <SoftBox component="form" role="form">
+      <SoftBox component="form" role="form" onSubmit={handleSubmit}>
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Email
+              Login
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="email" placeholder="Email" />
+          <SoftInput 
+            name="login" 
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
+            placeholder="Login"
+            required 
+             />
         </SoftBox>
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
@@ -45,7 +67,14 @@ function Cover() {
               Hasło
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="Hasło" />
+          <SoftInput 
+            name="password" 
+            type="password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Hasło" 
+            required
+             />
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -59,7 +88,7 @@ function Cover() {
           </SoftTypography>
         </SoftBox>
         <SoftBox mt={4} mb={1}>
-          <SoftButton variant="gradient" color="info" fullWidth>
+          <SoftButton type="submit" variant="gradient" color="info" fullWidth>
             Zaloguj się
           </SoftButton>
         </SoftBox>
@@ -83,4 +112,4 @@ function Cover() {
   );
 }
 
-export default Cover;
+export default Login;

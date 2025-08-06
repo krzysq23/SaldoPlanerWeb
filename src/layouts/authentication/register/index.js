@@ -19,7 +19,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import curved11 from "assets/images/curved-images/curved11.jpg";
 
-function Cover() {
+function Register() {
   const [agreement, setAgreement] = useState(true);
 
   const handleSetAgremment = () => setAgreement(!agreement);
@@ -35,10 +35,10 @@ function Cover() {
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Nazwa
+              Login
             </SoftTypography>
           </SoftBox>
-          <SoftInput placeholder="Nazwa" />
+          <SoftInput name="login" placeholder="Login" />
         </SoftBox>
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
@@ -46,7 +46,7 @@ function Cover() {
               Email
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="email" placeholder="Email" />
+          <SoftInput name="email" type="email" placeholder="Email" />
         </SoftBox>
         <SoftBox mb={2} lineHeight={1.25}>
           <SoftBox mb={1} ml={0.5}>
@@ -54,7 +54,7 @@ function Cover() {
               Hasło
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="Hasło" />
+          <SoftInput name="password" type="password" placeholder="Hasło" />
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Checkbox checked={agreement} onChange={handleSetAgremment} />
@@ -95,4 +95,4 @@ function Cover() {
   );
 }
 
-export default Cover;
+export default Register;

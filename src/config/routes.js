@@ -17,19 +17,19 @@ const routes = [
         key: "sign-in",
         collapse: [
           {
-            name: "Cover",
-            key: "cover",
+            name: "Login",
+            key: "login",
             route: "/authentication/login",
             component: <SignInCover />,
           }
         ],
       },
       {
-        name: "Sign Up",
-        key: "sign-up",
+        name: "Register",
+        key: "register",
         collapse: [
           {
-            name: "Cover",
+            name: "Register",
             key: "cover",
             route: "/authentication/register",
             component: <SignUpCover />,
