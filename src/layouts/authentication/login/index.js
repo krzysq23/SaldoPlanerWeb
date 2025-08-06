@@ -32,8 +32,7 @@ function Login() {
     e.preventDefault();
 
     if (login === "admin" && password === "admin") {
-      localStorage.setItem("auth", "true");
-
+      localStorage.setItem("token", "jWebToken12334567890");
       navigate("/dashboard");
     } else {
       alert("Nieprawidłowy email lub hasło.");

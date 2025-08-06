@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -51,6 +50,13 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const username = "Krzysztof";
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   useEffect(() => {
     // Setting the navbar type
@@ -137,31 +143,23 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
         </SoftBox>
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <SoftBox pr={1}>
-              <SoftInput
-                placeholder="Type here..."
-                icon={{ component: "search", direction: "left" }}
-              />
-            </SoftBox>
             <SoftBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <SoftTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Sign in
-                  </SoftTypography>
-                </IconButton>
-              </Link>
+              <IconButton sx={navbarIconButton} size="small">
+                <Icon
+                  sx={({ palette: { dark, white } }) => ({
+                    color: light ? white.main : dark.main,
+                  })}
+                >
+                  account_circle
+                </Icon>
+                <SoftTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light ? "white" : "dark"}
+                >
+                  {username}
+                </SoftTypography>
+              </IconButton>
               <IconButton
                 size="small"
                 color="inherit"
@@ -176,20 +174,28 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
                 size="small"
                 color="inherit"
                 sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon>settings</Icon>
-              </IconButton>
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
                 aria-controls="notification-menu"
                 aria-haspopup="true"
                 variant="contained"
                 onClick={handleOpenMenu}
               >
                 <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
+              </IconButton>
+              <IconButton sx={navbarIconButton} size="small" onClick={handleLogout}>
+                <Icon
+                  sx={({ palette: { dark, white } }) => ({
+                    color: light ? white.main : dark.main,
+                  })}
+                >
+                  logout
+                </Icon>
+                <SoftTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light ? "white" : "dark"}
+                >
+                  Wyloguj
+                </SoftTypography>
               </IconButton>
               {renderMenu()}
             </SoftBox>

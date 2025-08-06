@@ -13,11 +13,9 @@ import SoftTypography from "components/SoftTypography";
 // Soft UI Dashboard PRO React base styles
 import typography from "assets/theme/base/typography";
 
-function Footer({ company = { href: "https://www.creative-tim.com/", name: "Creative Tim" }, links = [
-  { href: "https://www.creative-tim.com/", name: "Creative Tim" },
-  { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-  { href: "https://www.creative-tim.com/blog", name: "Blog" },
-  { href: "https://www.creative-tim.com/license", name: "License" },
+function Footer({ company = { href: "https://xsware.pl", name: "XsWare Solution" }, links = [
+  { href: "https://xsware.pl", name: "Saldo Planer" },
+  { href: "https://xsware.pl", name: "O nas" }
 ] }) {
   const { href, name } = company;
   const { size } = typography;
@@ -51,19 +49,12 @@ function Footer({ company = { href: "https://www.creative-tim.com/", name: "Crea
         fontSize={size.sm}
         px={1.5}
       >
-        &copy; {new Date().getFullYear()}, made with
-        <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
-            favorite
-          </Icon>
-        </SoftBox>
-        by
+        &copy; {new Date().getFullYear()}, created by
         <Link href={href} target="_blank">
           <SoftTypography variant="button" fontWeight="medium">
             &nbsp;{name}&nbsp;
           </SoftTypography>
         </Link>
-        for a better web.
       </SoftBox>
       <SoftBox
         component="ul"
