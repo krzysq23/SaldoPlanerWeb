@@ -40,7 +40,23 @@ const pageRoutes = [
         route: "/authentication/register",
       }
     ],
-  }
+  },
+  {
+    name: "Error",
+    key: "error",
+    collapse: [
+      {
+        name: "Error 404",
+        key: "error-404",
+        route: "pages/error/404",
+      },
+      {
+        name: "Error 500",
+        key: "error-500",
+        route: "/pages/error/500",
+      },
+    ],
+  },
 ];
 
 export default pageRoutes;
