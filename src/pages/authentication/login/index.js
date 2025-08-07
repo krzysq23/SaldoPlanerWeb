@@ -1,8 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -30,6 +30,19 @@ function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const message = location.state?.message;
+
+  useEffect(() => {
+    if (message) {
+      setNotify((prev) => ({
+        ...prev,
+        succ_content: message,
+      }));
+      setSuccessSB(true);
+      navigate(location.pathname, { replace: true });
+    }
+  }, [message, navigate, location.pathname]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +55,7 @@ function Login() {
       .catch((err) => {
         setNotify((prev) => ({
           ...prev,
-          content: err.message,
+          err_content: err.message,
         }));
         setErrorSB(true);
       });
@@ -50,23 +63,41 @@ function Login() {
   };
 
   const [errorSB, setErrorSB] = useState(false);
+  const [successSB, setSuccessSB] = useState(false);
   const closeErrorSB = () => setErrorSB(false);
+  const closeSuccessSB = () => setSuccessSB(false);
   const [notify, setNotify] = useState({
-    title: "Błąd logowania",
-    content: "Nieprawidłowy login lub hasło",
+    err_title: "Błąd logowania",
+    err_content: "Nieprawidłowy login lub hasło",
+    succ_title: "Utworzono konto",
+    succ_content: "Możesz teraz się zalogować",
   });
   
   const renderErrorSB = (
     <SoftSnackbar
         color="error"
         icon="warning"
-        title={notify.title}
-        content={notify.content}
+        title={notify.err_title}
+        content={notify.err_content}
         dateTime=""
         open={errorSB}
         onClose={closeErrorSB}
         close={closeErrorSB}
       />
+  );
+
+  const renderSuccessSB = (
+    <SoftSnackbar
+      color="success"
+      icon="check"
+      title={notify.succ_title}
+      content={notify.succ_content}
+      dateTime=""
+      open={successSB}
+      onClose={closeSuccessSB}
+      close={closeSuccessSB}
+      bgWhite
+    />
   );
 
   return (
@@ -120,7 +151,6 @@ function Login() {
           <SoftButton type="submit" variant="gradient" color="info" fullWidth>
             Zaloguj się
           </SoftButton>
-          {renderErrorSB}
         </SoftBox>
         <SoftBox mt={3} textAlign="center">
           <SoftTypography variant="button" color="text" fontWeight="regular">
@@ -137,6 +167,8 @@ function Login() {
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
+        {renderErrorSB}
+        {renderSuccessSB}
       </SoftBox>
     </CoverLayout>
   );

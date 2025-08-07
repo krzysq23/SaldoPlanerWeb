@@ -3,6 +3,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterCredentials {
+  userName: string;
+  login: string;
+  email: string;
+  password: string;
+}
+
 export interface AuthResponse {
   token: string;
   user: {
@@ -11,6 +18,10 @@ export interface AuthResponse {
     firstName: string;
     lastName: string;
   };
+}
+
+export interface RegisterResponse {
+  message: string;
 }
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -35,6 +46,25 @@ class AuthService {
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
+
+    return data;
+  }
+
+  async register(credentials: RegisterCredentials): Promise<RegisterResponse> {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_REGISTER_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Błąd przy tworzeniu konta");
+    }
+
+    const data: RegisterResponse = await response.json();
 
     return data;
   }
