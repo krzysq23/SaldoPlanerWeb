@@ -12,12 +12,15 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
+import SoftSnackbar from "components/SoftSnackbar";
 
 // Authentication layout components
 import CoverLayout from "pages/authentication/components/CoverLayout";
 
 // Images
 import curved9 from "assets/images/curved-images/curved9.jpg";
+
+import authService from "services/auth/authService";
 
 function Login() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -31,13 +34,39 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (login === "admin" && password === "admin") {
-      localStorage.setItem("token", "jWebToken12334567890");
-      navigate("/dashboard");
-    } else {
-      alert("Nieprawidłowy email lub hasło.");
-    }
+    authService
+      .login({ login: login, password: password })
+      .then((data) => {
+        navigate("/dashboard");
+      })
+      .catch((err) => {
+        setNotify((prev) => ({
+          ...prev,
+          content: err.message,
+        }));
+        setErrorSB(true);
+      });
+
   };
+
+  const [errorSB, setErrorSB] = useState(false);
+  const closeErrorSB = () => setErrorSB(false);
+  const [notify, setNotify] = useState({
+    title: "Błąd logowania",
+    content: "Nieprawidłowy login lub hasło",
+  });
+  
+  const renderErrorSB = (
+    <SoftSnackbar
+        color="error"
+        icon="warning"
+        title={notify.title}
+        content={notify.content}
+        open={errorSB}
+        onClose={closeErrorSB}
+        close={closeErrorSB}
+      />
+  );
 
   return (
     <CoverLayout
@@ -90,6 +119,7 @@ function Login() {
           <SoftButton type="submit" variant="gradient" color="info" fullWidth>
             Zaloguj się
           </SoftButton>
+          {renderErrorSB}
         </SoftBox>
         <SoftBox mt={3} textAlign="center">
           <SoftTypography variant="button" color="text" fontWeight="regular">
