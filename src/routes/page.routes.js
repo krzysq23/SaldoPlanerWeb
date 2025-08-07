@@ -48,12 +48,12 @@ const pageRoutes = [
       {
         name: "Error 404",
         key: "error-404",
-        route: "pages/error/404",
+        route: "/error/404",
       },
       {
         name: "Error 500",
         key: "error-500",
-        route: "/pages/error/500",
+        route: "/error/500",
       },
     ],
   },

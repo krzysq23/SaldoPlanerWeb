@@ -62,6 +62,7 @@ function Login() {
         icon="warning"
         title={notify.title}
         content={notify.content}
+        dateTime=""
         open={errorSB}
         onClose={closeErrorSB}
         close={closeErrorSB}

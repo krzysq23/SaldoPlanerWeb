@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard PRO React - v4.0.3
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// react-router-dom components
 import { Link } from "react-router-dom";
 
 // @mui material components
@@ -32,7 +16,7 @@ import PageLayout from "layouts/LayoutContainers/PageLayout";
 import typography from "assets/theme/base/typography";
 
 // Authentication layout components
-import Footer from "layouts/authentication/components/Footer";
+import Footer from "pages/authentication/components/Footer";
 
 // Soft UI Dashboard PRO React page layout routes
 import pageRoutes from "routes/page.routes";
@@ -45,16 +29,6 @@ function Error500() {
 
   return (
     <PageLayout white>
-      <DefaultNavbar
-        routes={pageRoutes}
-        transparent
-        action={{
-          type: "external",
-          route: "https://creative-tim.com/product/soft-ui-dashboard-pro-react",
-          label: "buy now",
-          color: "dark",
-        }}
-      />
       <SoftBox my={18} height="calc(100vh - 18rem)">
         <Grid
           container
