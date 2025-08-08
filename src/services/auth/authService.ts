@@ -1,27 +1,4 @@
-export interface LoginCredentials {
-  login: string;
-  password: string;
-}
-
-export interface RegisterCredentials {
-  userName: string;
-  login: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  token: string;
-  user: {
-    login: string;
-    email: string;
-    userName: string;
-  };
-}
-
-export interface RegisterResponse {
-  message: string;
-}
+import { LoginCredentials, AuthResponse, RegisterCredentials, RegisterResponse } from "types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

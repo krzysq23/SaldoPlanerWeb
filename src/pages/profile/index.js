@@ -15,7 +15,7 @@ import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 
-function User() {
+function Profile() {
 
   const { values } = breakpoints;
 
@@ -32,7 +32,7 @@ function User() {
                 textTransform="capitalize"
                 fontWeight="bold"
               >
-                Użytkownik
+                Konto użytkownika
               </SoftTypography>
             </SoftBox>
             </Grid>  
@@ -44,4 +44,4 @@ function User() {
       );
 }
 
-export default User;
+export default Profile;

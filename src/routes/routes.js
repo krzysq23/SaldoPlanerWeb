@@ -9,7 +9,7 @@ import Budgets from "pages/finance/budgets";
 import Goals from "pages/finance/goals";
 import Reports from "pages/finance/reports";
 import Calendar from "pages/calendar";
-import User from "pages/user";
+import Profile from "pages/profile";
 import UserManager from "pages/settings/users";
 import AppSettings from "pages/settings/application";
 
@@ -93,14 +93,14 @@ const routes = [
   {
     type: "collapse",
     name: "Użytkownik",
-    key: "user",
+    key: "profile",
     icon: <CustomerSupport size="12px" />,
     collapse: [
       {
         name: "Konto",
-        key: "userAccount",
-        route: "/user",
-        component: <User />,
+        key: "profile",
+        route: "/profile",
+        component: <Profile />,
       }
     ]
   },
