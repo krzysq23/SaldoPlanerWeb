@@ -9,7 +9,6 @@ import SoftTypography from "components/SoftTypography";
 import SoftButton from "components/SoftButton";
 
 // Soft UI Dashboard PRO React example components
-import DefaultNavbar from "layouts/Navbars/DefaultNavbar";
 import PageLayout from "layouts/LayoutContainers/PageLayout";
 
 // Soft UI Dashboard PRO React base styles
@@ -17,9 +16,6 @@ import typography from "assets/theme/base/typography";
 
 // Authentication layout components
 import Footer from "pages/authentication/components/Footer";
-
-// Soft UI Dashboard PRO React page layout routes
-import pageRoutes from "routes/page.routes";
 
 // Images
 import error404 from "assets/images/illustrations/error-404.png";

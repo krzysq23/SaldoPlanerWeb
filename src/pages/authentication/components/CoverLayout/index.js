@@ -16,8 +16,6 @@ import PageLayout from "layouts/LayoutContainers/PageLayout";
 // Authentication layout components
 import Footer from "pages/authentication/components/Footer";
 
-// Soft UI Dashboard PRO React page layout routes
-import pageRoutes from "routes/page.routes";
 
 function CoverLayout({ color = "info", header = "", title = "", description = "", image, top = 20, children }) {
   return (

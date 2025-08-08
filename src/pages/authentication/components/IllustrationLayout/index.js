@@ -10,11 +10,7 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard PRO React example components
-import DefaultNavbar from "layouts/Navbars/DefaultNavbar";
 import PageLayout from "layouts/LayoutContainers/PageLayout";
-
-// Soft UI Dashboard PRO React page layout routes
-import pageRoutes from "routes/page.routes";
 
 // Images
 import pattern from "assets/images/shapes/pattern-lines.svg";

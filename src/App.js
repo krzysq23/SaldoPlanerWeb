@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import routes from "./routes/routes";
+import routes from "routes/routes";
 
 import Dashboard from "pages/dashboard";
 import Login from "pages/authentication/login";
@@ -20,7 +20,7 @@ import theme from "assets/theme";
 import brand from "assets/images/logo.png";
 
 // Soft UI Dashboard PRO React contexts
-import { useSoftUIController, setMiniSidenav } from "context";
+import { useSoftUIController, setMiniSidenav } from "context/index";
 
 export default function App() {
 

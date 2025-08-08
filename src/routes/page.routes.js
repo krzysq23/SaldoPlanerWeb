@@ -18,45 +18,7 @@ const pageRoutes = [
         route: "/dashboard",
       }
     ]
-  },
-  {
-    name: "Sign In",
-    key: "login",
-    collapse: [
-      {
-        name: "Login",
-        key: "login",
-        route: "/authentication/login",
-      }
-    ],
-  },
-  {
-    name: "Sign Up",
-    key: "register",
-    collapse: [
-      {
-        name: "Register",
-        key: "register",
-        route: "/authentication/register",
-      }
-    ],
-  },
-  {
-    name: "Error",
-    key: "error",
-    collapse: [
-      {
-        name: "Error 404",
-        key: "error-404",
-        route: "/error/404",
-      },
-      {
-        name: "Error 500",
-        key: "error-500",
-        route: "/error/500",
-      },
-    ],
-  },
+  }
 ];
 
 export default pageRoutes;

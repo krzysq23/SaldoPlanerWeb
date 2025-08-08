@@ -1,13 +1,11 @@
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
-import SoftBox from "components/SoftBox/index";
+import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
 // Soft UI Dashboard PRO React base styles
-import typography from "assets/theme/base/typography";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Soft UI Dashboard PRO React example components
@@ -15,7 +13,7 @@ import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 
-function Default() {
+function Reports() {
 
   const { values } = breakpoints;
 
@@ -32,7 +30,7 @@ function Default() {
                 textTransform="capitalize"
                 fontWeight="bold"
               >
-                Dashboard
+                Raporty
               </SoftTypography>
             </SoftBox>
             </Grid>  
@@ -44,4 +42,4 @@ function Default() {
       );
 }
 
-export default Default;
+export default Reports;

@@ -16,11 +16,12 @@ import Icon from "@mui/material/Icon";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import SoftInput from "components/SoftInput";
 
 // Soft UI Dashboard PRO React example components
 import Breadcrumbs from "layouts/Breadcrumbs";
 import NotificationItem from "layouts/Items/NotificationItem";
+
+import authService from "services/auth/authService";
 
 // Custom styles for DashboardNavbar
 import {
@@ -50,7 +51,8 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const username = "Krzysztof";
+  const user = authService.getCurrentUser();
+  const userName = user?.userName ?? "";
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -89,7 +91,6 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
 
-  // Render the notifications menu
   const renderMenu = () => (
     <Menu
       anchorEl={openMenu}
@@ -157,7 +158,7 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
                   fontWeight="medium"
                   color={light ? "white" : "dark"}
                 >
-                  {username}
+                  {userName}
                 </SoftTypography>
               </IconButton>
               <IconButton
