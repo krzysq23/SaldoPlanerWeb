@@ -1,7 +1,9 @@
 import { LoginCredentials, AuthResponse, RegisterCredentials, RegisterResponse } from "types";
 
-const API_URL = process.env.REACT_APP_API_URL;
+import { handleResponse } from "../utils/apiHandler";
 
+const API_URL = process.env.REACT_APP_API_URL;
+  
 class AuthService {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -13,10 +15,7 @@ class AuthService {
       body: JSON.stringify(credentials),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Błąd logowania");
-    }
+    await handleResponse(response, "Błąd logowania");
 
     const data: AuthResponse = await response.json();
 
@@ -35,10 +34,7 @@ class AuthService {
       body: JSON.stringify(credentials),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Błąd przy tworzeniu konta");
-    }
+    await handleResponse(response, "Błąd przy tworzeniu konta");
 
     const data: RegisterResponse = await response.json();
 
@@ -48,6 +44,8 @@ class AuthService {
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.setItem("sessionExpired", "true");
+    window.location.href = "/authentication/session-expired";
   }
 
   getToken(): string | null {

@@ -1,5 +1,7 @@
 import { Client } from "types";
 
+import { handleResponse } from "../utils/apiHandler";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 class ClientService {
@@ -13,10 +15,7 @@ class ClientService {
       },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Błąd pobierania klientów");
-    }
+    await handleResponse(response, "Błąd pobierania klientów");
 
     return await response.json();
   }
@@ -48,10 +47,7 @@ class ClientService {
       body: JSON.stringify(client),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Błąd dodawania klienta");
-    }
+    await handleResponse(response, "Błąd dodawania klienta");
 
     return await response.json();
   }

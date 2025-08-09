@@ -48,7 +48,7 @@ function Register() {
         .register({ userName: name, login: login, email: email, password: password })
         .then((data) => {
           navigate("/authentication/login", {
-            state: { message: "Możesz teraz się zalogować" },
+            state: { message: "Utworzono konto. Możesz teraz się zalogować." },
           });
         })
         .catch((err) => {

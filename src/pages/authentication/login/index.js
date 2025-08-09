@@ -42,6 +42,15 @@ function Login() {
       setSuccessSB(true);
       navigate(location.pathname, { replace: true });
     }
+    var sessionExpired = localStorage.getItem("sessionExpired");
+    if(sessionExpired == "true") {
+      setNotify((prev) => ({
+        ...prev,
+        succ_content: "Twoja sesja wygasła. Zaloguj się ponownie.",
+      }));
+      setSuccessSB(true);
+      localStorage.removeItem("sessionExpired");
+    }
   }, [message, navigate, location.pathname]);
 
   const handleSubmit = (e) => {
@@ -69,8 +78,8 @@ function Login() {
   const [notify, setNotify] = useState({
     err_title: "Błąd logowania",
     err_content: "Nieprawidłowy login lub hasło",
-    succ_title: "Utworzono konto",
-    succ_content: "Możesz teraz się zalogować",
+    succ_title: "Informacja",
+    succ_content: "",
   });
   
   const renderErrorSB = (

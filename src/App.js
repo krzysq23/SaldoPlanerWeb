@@ -54,43 +54,43 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-const getRoutes = (allRoutes, isAuthenticated) => {
-  return allRoutes.flatMap((route) => {
-    if (route.collapse) {
-      return getRoutes(route.collapse, isAuthenticated);
-    }
-
-    if (route.route && route.component) {
-      const isAuthPage =
-        route.route === "/authentication/login" ||
-        route.route === "/authentication/register";
-
-      if (isAuthenticated && isAuthPage) {
-        return (
-          <Route
-            path={route.route}
-            element={<Navigate to="/dashboard" replace />}
-            key={route.key}
-          />
-        );
+  const getRoutes = (allRoutes, isAuthenticated) => {
+    return allRoutes.flatMap((route) => {
+      if (route.collapse) {
+        return getRoutes(route.collapse, isAuthenticated);
       }
 
-      if (!isAuthenticated && !isAuthPage) {
-        return (
-          <Route
-            path={route.route}
-            element={<Navigate to="/authentication/login" replace />}
-            key={route.key}
-          />
-        );
+      if (route.route && route.component) {
+        const isAuthPage =
+          route.route === "/authentication/login" ||
+          route.route === "/authentication/register";
+
+        if (isAuthenticated && isAuthPage) {
+          return (
+            <Route
+              path={route.route}
+              element={<Navigate to="/dashboard" replace />}
+              key={route.key}
+            />
+          );
+        }
+
+        if (!isAuthenticated && !isAuthPage) {
+          return (
+            <Route
+              path={route.route}
+              element={<Navigate to="/authentication/login" replace />}
+              key={route.key}
+            />
+          );
+        }
+
+        return <Route path={route.route} element={route.component} key={route.key} />;
       }
 
-      return <Route path={route.route} element={route.component} key={route.key} />;
-    }
-
-    return [];
-  });
-};
+      return [];
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
