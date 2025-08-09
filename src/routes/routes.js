@@ -12,6 +12,9 @@ import Calendar from "pages/calendar";
 import Profile from "pages/profile";
 import UserManager from "pages/settings/users";
 import AppSettings from "pages/settings/application";
+import AddUser from "pages/settings/users/new";
+import EditUser from "pages/settings/users/edit";
+
 
 // Soft UI Dashboard PRO React icons
 import Shop from "layouts/Icons/Shop";
@@ -125,9 +128,26 @@ const routes = [
     ]
   },
   {
+    name: "Użytkownicy",
+    key: "users",
+    collapse: [
+      {
+        name: "Użytkownicy",
+        key: "addUser",
+        route: "/user/add",
+        component: <AddUser />,
+      },
+      {
+        name: "Ustawienia aplikacji ",
+        key: "editUser",
+        route: "/user/edit",
+        component: <EditUser />,
+      }
+    ]
+  },
+  {
     name: "Authentication",
     key: "authentication",
-    icon: <Document size="12px" />,
     collapse: [
       {
         name: "Login",

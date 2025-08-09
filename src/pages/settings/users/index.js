@@ -102,7 +102,7 @@ function UserManager() {
               </SoftTypography>
             </SoftBox>
             <Stack spacing={1} direction="row">
-              <Link to="/settings/users/new">
+              <Link to="/user/add">
                 <SoftButton variant="gradient" color="info" size="small">
                   + NOWY <br/> UŻYTKOWNIK
                 </SoftButton>
