@@ -34,7 +34,7 @@ const form = {
       type: "password",
       placeholder: "******",
       errorMsg: "Wprowadź hasło.",
-      invalidMsg: "hasło musi mień przynajmniej 4 znaki.",
+      invalidMsg: "Hasło musi mień przynajmniej 4 znaki.",
     },
     roles: {
       name: "roles",

@@ -67,6 +67,24 @@ class ClientService {
     return await response.json();
   }
 
+  async changePassword(client: Client): Promise<Client> {
+    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_CHANGE_PASSWORD_CLIENT_ENDPOINT}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(client),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Błąd pobierania klienta");
+    }
+
+    return await response.json();
+  }
+
   async removeClient(id: String): Promise<Response> {
     const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_REMOVE_CLIENT_ENDPOINT}/${id}`, {
       method: "Get",

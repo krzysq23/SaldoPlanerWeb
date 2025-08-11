@@ -2,9 +2,7 @@ import ActionCell from "pages/settings/users/components/ActionCell";
 
 class DataTableUtils {
 
-  generateClientTableData(users, removeUserHandler) {
-
-    console.log("generateClientTableData removeUserHandler : ", removeUserHandler);
+  generateClientTableData(users, removeUserHandler, changePasswordHandler) {
 
     return {
       columns: [
@@ -21,7 +19,7 @@ class DataTableUtils {
         login: user.login,
         email: user.email,
         roles: user.roles.join(", "),
-        action: <ActionCell user={user} removeUser={removeUserHandler} />,
+        action: <ActionCell user={user} removeUser={removeUserHandler} changePassword={changePasswordHandler}/>,
       })),
     };
   };

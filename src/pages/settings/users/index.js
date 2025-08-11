@@ -41,7 +41,7 @@ function UserManager() {
       clientService
             .getClients()
             .then((data) => {
-              setClients(dataTableUtils.generateClientTableData(data, removeUserHandler));
+              setClients(dataTableUtils.generateClientTableData(data, removeUserHandler, changePasswordHandler));
             })
             .catch((err) => {
               showError(err.message);
@@ -87,6 +87,35 @@ function UserManager() {
       });
   };
 
+  const changePasswordHandler = (data) => {
+    newSwal
+      .fire({
+        title: "Zmiana hasła - " + data.userName,
+        input: "password",
+        inputAttributes: {
+          autocapitalize: "off",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Zapisz",
+        cancelButtonText: "ANULUJ",
+        showLoaderOnConfirm: true,
+        preConfirm: (password) => {
+          if (password.length < 4) {
+            Swal.showValidationMessage(`Hasło musi mień przynajmniej 4 znaki.`);
+          } else{
+            clientService
+            .changePassword({ id: data.id, password: password})
+            .then((resp) => {
+              Swal.fire("Sukces!", `Hasło zostało zmienione.`, "success");
+            })
+            .catch((err) => {
+              Swal.fire("Błąd!", `Nie udało się zmienić hasła.`, "error");
+            })
+          }
+        }
+      })
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -122,7 +151,7 @@ function UserManager() {
               </Link>
             </Stack>
           </SoftBox>
-          <DataTable table={clients} canSearch removeUser={removeUserHandler} />
+          <DataTable table={clients} canSearch />
         </Card>
       </SoftBox>
       <Footer />
