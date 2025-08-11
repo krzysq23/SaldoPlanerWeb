@@ -4,9 +4,6 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import routes from "routes/routes";
 
-import Dashboard from "pages/dashboard";
-import Login from "pages/authentication/login";
-
 // Soft UI Dashboard PRO React example components
 import Sidenav from "layouts/Sidenav";
 import Configurator from "layouts/Configurator";
@@ -21,6 +18,9 @@ import brand from "assets/images/logo.png";
 
 // Soft UI Dashboard PRO React contexts
 import { useSoftUIController, setMiniSidenav } from "context/index";
+
+// notify component
+import NotifyProvider from "layouts/Notify";
 
 export default function App() {
 
@@ -109,10 +109,12 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes, isAuthenticated)}
-        <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/authentication/login"} />} />
-      </Routes>
+      <NotifyProvider>
+        <Routes>
+          {getRoutes(routes, isAuthenticated)}
+          <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/authentication/login"} />} />
+        </Routes>
+      </NotifyProvider>
     </ThemeProvider>
 
   );
