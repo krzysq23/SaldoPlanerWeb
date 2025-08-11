@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-import { Client } from "types";
+import { useNotify } from "layouts/Notify";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -32,6 +32,7 @@ import dataTableUtils from "utils/dataTableUtils";
 function UserManager() {
 
   const { values } = breakpoints;
+  const { showSuccess, showError } = useNotify();
   const [clients, setClients] = useState({ columns: [], rows: [] });
 
   useEffect(() => {
@@ -43,36 +44,12 @@ function UserManager() {
               setClients(dataTableUtils.generateClientTableData(data));
             })
             .catch((err) => {
-              setNotify((prev) => ({
-                ...prev,
-                err_content: err.message,
-              }));
-              setErrorSB(true);
+              showError(err.message);
             });
     };
 
     fetchClients();
   }, []);
-
-  const [errorSB, setErrorSB] = useState(false);
-  const closeErrorSB = () => setErrorSB(false);
-  const [notify, setNotify] = useState({
-    err_title: "Wystąpił błąd",
-    err_content: "Error message",
-  });
-
-  const renderErrorSB = (
-      <SoftSnackbar
-          color="error"
-          icon="warning"
-          title={notify.err_title}
-          content={notify.err_content}
-          dateTime=""
-          open={errorSB}
-          onClose={closeErrorSB}
-          close={closeErrorSB}
-        />
-    );
 
   return (
     <DashboardLayout>
@@ -112,7 +89,6 @@ function UserManager() {
           <DataTable table={clients} canSearch />
         </Card>
       </SoftBox>
-      {renderErrorSB}
       <Footer />
     </DashboardLayout>
       );
