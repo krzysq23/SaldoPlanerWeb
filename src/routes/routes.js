@@ -91,7 +91,7 @@ const routes = [
       }
     ]
   },
-  { type: "title", title: "Ustawienia", key: "title-settings" },
+  { type: "title", title: "Profil", key: "title-settings" },
   { type: "divider", key: "divider-1" },
   {
     type: "collapse",
@@ -107,6 +107,8 @@ const routes = [
       }
     ]
   },
+  { type: "title", title: "Ustawienia", key: "title-settings" },
+  { type: "divider", key: "divider-2" },
   {
     type: "collapse",
     name: "Ustawienia",
