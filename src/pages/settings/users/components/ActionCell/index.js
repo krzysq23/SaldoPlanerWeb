@@ -14,11 +14,6 @@ function ActionCell({ user, removeUser }) {
 
   return (
     <SoftBox display="flex" alignItems="center">
-      <SoftTypography variant="body1" color="secondary" sx={{ cursor: "pointer", lineHeight: 0 }}>
-        <Tooltip title="Podgląd" placement="top">
-          <Icon>visibility</Icon>
-        </Tooltip>
-      </SoftTypography>
       <SoftBox mx={2}>
         <SoftTypography variant="body1" color="secondary" sx={{ cursor: "pointer", lineHeight: 0 }}>
           <Link to={`/user/edit/${user.id}`}>
