@@ -43,7 +43,6 @@ function AddUser() {
 
   const handleSubmit = (values, actions) => {
     console.log("Wyslij formularz:", values);
-    actions.setSubmitting(false);
     clientService
           .addClient(values)
           .then((data) => {
@@ -51,6 +50,7 @@ function AddUser() {
             navigate("/settings/users");
           })
           .catch((err) => {
+            actions.setSubmitting(false);
             showError(err.message);
           });
   };
