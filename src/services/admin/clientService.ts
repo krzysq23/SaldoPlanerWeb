@@ -21,7 +21,7 @@ class ClientService {
   }
 
   async getClientById(id: string): Promise<Client> {
-    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_GET_CLIENTS_ENDPOINT}/${id}`, {
+    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_GET_CLIENT_ENDPOINT}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -48,6 +48,21 @@ class ClientService {
     });
 
     await handleResponse(response, "Błąd dodawania klienta");
+
+    return await response.json();
+  }
+
+  async editlient(client: Client): Promise<Response> {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_EDIT_CLIENT_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(client),
+    });
+
+    await handleResponse(response, "Błąd edycji klienta");
 
     return await response.json();
   }

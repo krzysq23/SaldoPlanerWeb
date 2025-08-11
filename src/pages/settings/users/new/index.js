@@ -42,7 +42,6 @@ function AddUser() {
   const currentValidation = validations;
 
   const handleSubmit = (values, actions) => {
-    console.log("Wyslij formularz:", values);
     clientService
           .addClient(values)
           .then((data) => {

@@ -1,6 +1,11 @@
 const form = {
   formId: "new-user-form",
   formField: {
+    id: {
+      name: "id",
+      label: "id",
+      type: "text"
+    },
     userName: {
       name: "userName",
       label: "Imię i nazwisko",

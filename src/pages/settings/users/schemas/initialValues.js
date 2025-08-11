@@ -2,6 +2,7 @@ import checkout from "./form";
 
 const {
   formField: {
+    id,
     userName,
     login,
     email,
@@ -11,6 +12,7 @@ const {
 } = checkout;
 
 const initialValues = {
+  [id.name]: "",
   [userName.name]: "",
   [login.name]: "",
   [email.name]: "",
