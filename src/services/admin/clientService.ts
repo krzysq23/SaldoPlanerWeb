@@ -1,4 +1,4 @@
-import { Client } from "types";
+import { Client, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
 
@@ -37,7 +37,7 @@ class ClientService {
     return await response.json();
   }
 
-  async addClient(client: Client): Promise<Client> {
+  async addClient(client: Client): Promise<Response> {
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_ADD_CLIENT_ENDPOINT, {
       method: "POST",
       headers: {
@@ -51,6 +51,21 @@ class ClientService {
 
     return await response.json();
   }
+
+  async removeClient(id: String): Promise<Response> {
+    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_REMOVE_CLIENT_ENDPOINT}/${id}`, {
+      method: "Get",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      }
+    });
+
+    await handleResponse(response, "Błąd dodawania klienta");
+
+    return await response.json();
+  }
+
 }
 
 const clientService = new ClientService();

@@ -2,7 +2,10 @@ import ActionCell from "pages/settings/users/components/ActionCell";
 
 class DataTableUtils {
 
-  generateClientTableData(clients) {
+  generateClientTableData(users, removeUserHandler) {
+
+    console.log("generateClientTableData removeUserHandler : ", removeUserHandler);
+
     return {
       columns: [
         { Header: "Id", accessor: "id", width: "10%" },
@@ -12,13 +15,13 @@ class DataTableUtils {
         { Header: "Role", accessor: "roles" },
         { Header: "action", accessor: "action" },
       ],
-      rows: clients.map((client) => ({
-        id: client.id,
-        name: client.userName,
-        login: client.login,
-        email: client.email,
-        roles: client.roles.join(", "),
-        action: <ActionCell />,
+      rows: users.map((user) => ({
+        id: user.id,
+        name: user.userName,
+        login: user.login,
+        email: user.email,
+        roles: user.roles.join(", "),
+        action: <ActionCell user={user} removeUser={removeUserHandler} />,
       })),
     };
   };

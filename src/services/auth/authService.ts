@@ -1,4 +1,4 @@
-import { LoginCredentials, AuthResponse, RegisterCredentials, RegisterResponse } from "types";
+import { LoginCredentials, AuthResponse, RegisterCredentials, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
 
@@ -25,7 +25,7 @@ class AuthService {
     return data;
   }
 
-  async register(credentials: RegisterCredentials): Promise<RegisterResponse> {
+  async register(credentials: RegisterCredentials): Promise<Response> {
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_REGISTER_ENDPOINT, {
       method: "POST",
       headers: {
@@ -36,7 +36,7 @@ class AuthService {
 
     await handleResponse(response, "Błąd przy tworzeniu konta");
 
-    const data: RegisterResponse = await response.json();
+    const data: Response = await response.json();
 
     return data;
   }

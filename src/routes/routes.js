@@ -140,7 +140,7 @@ const routes = [
       {
         name: "Ustawienia aplikacji ",
         key: "editUser",
-        route: "/user/edit",
+        route: "/user/edit/:userId",
         component: <EditUser />,
       }
     ]

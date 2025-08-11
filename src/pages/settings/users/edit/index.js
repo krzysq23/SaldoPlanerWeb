@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -17,6 +19,7 @@ import Footer from "layouts/Footer";
 function EditUser() {
 
   const { values } = breakpoints;
+  const { userId } = useParams();
 
   return (
     <DashboardLayout>

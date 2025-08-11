@@ -14,7 +14,9 @@ import SoftBox from "components/SoftBox/index";
 import SoftButton from "components/SoftButton";
 import SoftTypography from "components/SoftTypography";
 import DataTable from "layouts/Tables/DataTable";
-import SoftSnackbar from "components/SoftSnackbar";
+
+// sweetalert2 components
+import Swal from "sweetalert2";
 
 // Soft UI Dashboard PRO React base styles
 import breakpoints from "assets/theme/base/breakpoints";
@@ -23,8 +25,6 @@ import breakpoints from "assets/theme/base/breakpoints";
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
-
-// import dataTableData from "layouts/applications/data-tables/data/dataTableData";
 
 import clientService from "services/admin/clientService";
 import dataTableUtils from "utils/dataTableUtils";
@@ -41,7 +41,7 @@ function UserManager() {
       clientService
             .getClients()
             .then((data) => {
-              setClients(dataTableUtils.generateClientTableData(data));
+              setClients(dataTableUtils.generateClientTableData(data, removeUserHandler));
             })
             .catch((err) => {
               showError(err.message);
@@ -50,6 +50,42 @@ function UserManager() {
 
     fetchClients();
   }, []);
+
+  const newSwal = Swal.mixin({
+    customClass: {
+      confirmButton: "button button-success",
+      cancelButton: "button button-error",
+    },
+    buttonsStyling: false,
+  });
+
+  const removeUserHandler = (data) => {
+    newSwal
+      .fire({
+        title: "Usuwanie użytkownika",
+        html: `Czy na pewno chcesz usunąć użytkownika<br><b>${data.userName}</b>?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "USUŃ",
+        cancelButtonText: "ANULUJ",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          clientService
+            .removeClient(data.id)
+            .then((resp) => {
+              Swal.fire("Sukces!", `Użytkownik ${data.userName} został usunięty.`, "success");
+              setClients(prev => ({
+                ...prev,
+                rows: prev.rows.filter(user => user.id !== data.id)
+              }));
+            })
+            .catch((err) => {
+              Swal.fire("Błąd!", `Nie udało się usunąć użytkownika ${data.userName}`, "error");
+            });
+        }
+      });
+  };
 
   return (
     <DashboardLayout>
@@ -86,7 +122,7 @@ function UserManager() {
               </Link>
             </Stack>
           </SoftBox>
-          <DataTable table={clients} canSearch />
+          <DataTable table={clients} canSearch removeUser={removeUserHandler} />
         </Card>
       </SoftBox>
       <Footer />
