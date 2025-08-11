@@ -47,9 +47,8 @@ function Register() {
       authService
         .register({ userName: name, login: login, email: email, password: password })
         .then((data) => {
-          navigate("/authentication/login", {
-            state: { message: "Utworzono konto. Możesz teraz się zalogować." },
-          });
+          localStorage.setItem("APP_NOTIFY_MESSAGE_SUCCESS", "Utworzono konto. Możesz teraz się zalogować.");
+          navigate("/authentication/login");
         })
         .catch((err) => {
           setNotify((prev) => ({

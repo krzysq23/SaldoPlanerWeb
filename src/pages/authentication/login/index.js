@@ -1,8 +1,8 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // react-router-dom components
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -30,28 +30,6 @@ function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
-  const message = location.state?.message;
-
-  useEffect(() => {
-    if (message) {
-      setNotify((prev) => ({
-        ...prev,
-        succ_content: message,
-      }));
-      setSuccessSB(true);
-      navigate(location.pathname, { replace: true });
-    }
-    var sessionExpired = localStorage.getItem("sessionExpired");
-    if(sessionExpired == "true") {
-      setNotify((prev) => ({
-        ...prev,
-        succ_content: "Twoja sesja wygasła. Zaloguj się ponownie.",
-      }));
-      setSuccessSB(true);
-      localStorage.removeItem("sessionExpired");
-    }
-  }, [message, navigate, location.pathname]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

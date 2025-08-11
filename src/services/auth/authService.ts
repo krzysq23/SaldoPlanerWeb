@@ -44,7 +44,7 @@ class AuthService {
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.setItem("sessionExpired", "true");
+    localStorage.setItem("APP_NOTIFY_MESSAGE_ERROR", "Twoja sesja wygasła. Zaloguj się ponownie");
     window.location.href = "/authentication/session-expired";
   }
 
