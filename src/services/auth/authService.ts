@@ -1,4 +1,4 @@
-import { LoginCredentials, AuthResponse, RegisterCredentials, Response } from "types";
+import { LoginCredentials, AuthResponse, RegisterCredentials, ChangePassword, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
 
@@ -35,6 +35,22 @@ class AuthService {
     });
 
     await handleResponse(response, "Błąd przy tworzeniu konta");
+
+    const data: Response = await response.json();
+
+    return data;
+  }
+
+  async changePassword(credentials: ChangePassword): Promise<Response> {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_PASSSWORD_CHANGE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    await handleResponse(response, "Błąd przy zmianie hasła");
 
     const data: Response = await response.json();
 

@@ -4,6 +4,8 @@ import { useState } from "react";
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
 
+import { useNotify } from "layouts/Notify";
+
 // @mui material components
 import Switch from "@mui/material/Switch";
 
@@ -23,8 +25,9 @@ import curved9 from "assets/images/curved-images/curved9.jpg";
 import authService from "services/auth/authService";
 
 function Login() {
-  const [rememberMe, setRememberMe] = useState(false);
 
+  const [rememberMe, setRememberMe] = useState(false);
+  const { showSuccess, showError } = useNotify();
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const [login, setLogin] = useState("");
@@ -40,52 +43,10 @@ function Login() {
         navigate("/dashboard");
       })
       .catch((err) => {
-        setNotify((prev) => ({
-          ...prev,
-          err_content: err.message,
-        }));
-        setErrorSB(true);
+        showError(err.message);
       });
 
   };
-
-  const [errorSB, setErrorSB] = useState(false);
-  const [successSB, setSuccessSB] = useState(false);
-  const closeErrorSB = () => setErrorSB(false);
-  const closeSuccessSB = () => setSuccessSB(false);
-  const [notify, setNotify] = useState({
-    err_title: "Błąd logowania",
-    err_content: "Nieprawidłowy login lub hasło",
-    succ_title: "Informacja",
-    succ_content: "",
-  });
-  
-  const renderErrorSB = (
-    <SoftSnackbar
-        color="error"
-        icon="warning"
-        title={notify.err_title}
-        content={notify.err_content}
-        dateTime=""
-        open={errorSB}
-        onClose={closeErrorSB}
-        close={closeErrorSB}
-      />
-  );
-
-  const renderSuccessSB = (
-    <SoftSnackbar
-      color="success"
-      icon="check"
-      title={notify.succ_title}
-      content={notify.succ_content}
-      dateTime=""
-      open={successSB}
-      onClose={closeSuccessSB}
-      close={closeSuccessSB}
-      bgWhite
-    />
-  );
 
   return (
     <CoverLayout
@@ -154,8 +115,6 @@ function Login() {
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
-        {renderErrorSB}
-        {renderSuccessSB}
       </SoftBox>
     </CoverLayout>
   );

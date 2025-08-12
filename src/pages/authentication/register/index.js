@@ -3,6 +3,8 @@ import { useState } from "react";
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
 
+import { useNotify } from "layouts/Notify";
+
 // @mui material components
 import Checkbox from "@mui/material/Checkbox";
 
@@ -23,6 +25,7 @@ import authService from "services/auth/authService";
 
 function Register() {
 
+  const { showSuccess, showError } = useNotify();
   const [name, setName] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
@@ -36,11 +39,7 @@ function Register() {
       e.preventDefault();
   
       if(!agreement) {
-        setNotify((prev) => ({
-            ...prev,
-            content: "Musisz zaakceptować regulamin przed rejestracją",
-          }));
-          setErrorSB(true);
+        showError("Musisz zaakceptować regulamin przed rejestracją");
         return;
       }
 
@@ -51,34 +50,10 @@ function Register() {
           navigate("/authentication/login");
         })
         .catch((err) => {
-          setNotify((prev) => ({
-            ...prev,
-            content: err.message,
-          }));
-          setErrorSB(true);
+          showError(err.message);
         });
   
     };
-
-    const [errorSB, setErrorSB] = useState(false);
-    const closeErrorSB = () => setErrorSB(false);
-    const [notify, setNotify] = useState({
-      title: "Błąd logowania",
-      content: "Nie udało się zarejestrować",
-    });
-    
-    const renderErrorSB = (
-      <SoftSnackbar
-          color="error"
-          icon="warning"
-          title={notify.title}
-          content={notify.content}
-          dateTime=""
-          open={errorSB}
-          onClose={closeErrorSB}
-          close={closeErrorSB}
-        />
-    );
 
   return (
     <CoverLayout
@@ -194,7 +169,6 @@ function Register() {
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
-        {renderErrorSB}
       </SoftBox>
     </CoverLayout>
   );

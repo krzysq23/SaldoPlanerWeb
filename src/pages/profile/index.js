@@ -1,44 +1,62 @@
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox/index";
-import SoftTypography from "components/SoftTypography";
-
-// Soft UI Dashboard PRO React base styles
-import typography from "assets/theme/base/typography";
-import breakpoints from "assets/theme/base/breakpoints";
 
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import Header from "layouts/LayoutContainers/Header";
 import Footer from "layouts/Footer";
+import PlatformSettings from "./components/ProfileSettings";
+import ProfileInfoCard from "layouts/Cards/InfoCards/ProfileInfoCard";
+import ChangePassword from "./components/ChangePassword";
+import PasswordRequirements from "./components/PasswordRequirements";
+
+import authService from "services/auth/authService";
 
 function Profile() {
 
-  const { values } = breakpoints;
+  const user = authService.getCurrentUser();
+  const userName = user?.userName ?? "";
+  const login = user?.login ?? "";
+  const email = user?.email ?? "";
+  const roles = user?.roles ?? [];
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-      <SoftBox py={3}>
-        <Grid container>
-
-          <Grid item xs={12} lg={7}>
-            <SoftBox mb={3} p={1}>
-              <SoftTypography
-                variant={window.innerWidth < values.sm ? "h3" : "h2"}
-                textTransform="capitalize"
-                fontWeight="bold"
-              >
-                Konto użytkownika
-              </SoftTypography>
-            </SoftBox>
-            </Grid>  
-
+      <Header />
+      <SoftBox mt={5} mb={2}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6} xl={6}>
+            <ProfileInfoCard
+              title="Informacje profilowe"
+              description=""
+              info={{
+                "Imię i nazwisko": userName,
+                "email": email,
+                "role": roles,
+                "lokalizacja": "Polska",
+              }}
+              social={[]}
+              action={{ route: "", tooltip: "Edytuj profil" }}
+            />
           </Grid>
+          <Grid item xs={12} md={6} xl={6}>
+            <PlatformSettings />
+          </Grid>
+        </Grid>
       </SoftBox>
+      <SoftBox mb={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <ChangePassword />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PasswordRequirements />
+            </Grid>
+          </Grid>
+        </SoftBox>
       <Footer />
     </DashboardLayout>
       );
