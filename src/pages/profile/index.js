@@ -21,7 +21,6 @@ function Profile() {
   const userName = user?.userName ?? "";
   const login = user?.login ?? "";
   const email = user?.email ?? "";
-  const roles = user?.roles ?? [];
 
   return (
     <DashboardLayout>
@@ -34,9 +33,9 @@ function Profile() {
               description=""
               info={{
                 "Imię i nazwisko": userName,
-                "email": email,
-                "role": roles,
-                "lokalizacja": "Polska",
+                "Login": login,
+                "Email": email,
+                "Lokalizacja": "Polska",
               }}
               social={[]}
               action={{ route: "", tooltip: "Edytuj profil" }}

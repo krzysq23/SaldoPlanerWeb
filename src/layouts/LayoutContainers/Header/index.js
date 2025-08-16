@@ -26,7 +26,7 @@ function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const user = authService.getCurrentUser();
   const userName = user?.userName ?? "";
-  const login = user?.login ?? "";
+  const roles = user?.roles ?? [];
 
   useEffect(() => {
 
@@ -90,7 +90,7 @@ function Header() {
                 {userName}
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                {login}
+                {roles}
               </SoftTypography>
             </SoftBox>
           </Grid>
