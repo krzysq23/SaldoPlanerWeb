@@ -14,6 +14,7 @@ import UserManager from "pages/settings/users";
 import AppSettings from "pages/settings/application";
 import AddUser from "pages/settings/users/new";
 import EditUser from "pages/settings/users/edit";
+import CategoryForm from "pages/finance/categories/form";
 
 
 // Soft UI Dashboard PRO React icons
@@ -144,6 +145,18 @@ const routes = [
         key: "editUser",
         route: "/user/edit/:userId",
         component: <EditUser />,
+      }
+    ]
+  },
+  {
+    name: "Kategorie",
+    key: "category",
+    collapse: [
+      {
+        name: "Użytkownicy",
+        key: "categoryForm",
+        route: "/finance/categories/form",
+        component: <CategoryForm />,
       }
     ]
   },

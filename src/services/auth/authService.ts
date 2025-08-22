@@ -68,6 +68,11 @@ class AuthService {
     return localStorage.getItem("token");
   }
 
+  getUserId(): number | null {
+    const user = this.getCurrentUser();
+    return user?.id ?? null;
+  }
+
   getCurrentUser(): AuthResponse["user"] | null {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
