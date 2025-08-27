@@ -30,7 +30,7 @@ class DataTableUtils {
     };
   };
 
-  generateCategoriesTableData(categories, removeHandler, editHandler) {
+  generateCategoriesTableData(categories, removeHandler) {
 
     return {
       columns: [
@@ -59,7 +59,7 @@ class DataTableUtils {
             className={"text-dark"}>{category.icon}
           </Icon> 
         ),
-        action: <ActionCellCategory category={category} removeHandler={removeHandler} editHandler={editHandler}/>,
+        action: <ActionCellCategory category={category} removeHandler={removeHandler}/>,
       })),
     };
   };

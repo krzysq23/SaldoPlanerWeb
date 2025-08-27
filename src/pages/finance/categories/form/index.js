@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useNotify } from "layouts/Notify";
-
-import PropTypes from 'prop-types';
 
 // formik components
 import { Formik, Form } from "formik";
@@ -31,16 +29,18 @@ import FormField from "layouts/FormField";
 // Schemas for form and form feilds
 import validations from "pages/finance/categories/schemas/validations";
 import form from "pages/finance/categories/schemas/form";
-import initialValues from "pages/finance/categories/schemas/initialValues";
-import { typeOptions, colorOptions, iconOptions } from "pages/finance/categories/schemas/options";
+import { typeLabels, typeOptions, colorOptions, iconOptions } from "pages/finance/categories/schemas/options";
 
 import authService from "services/auth/authService";
 import categoryService from "services/category/categoryService";
 
-function CategoryForm({ category = null }) {
+function CategoryForm() {
 
-  const { values } = breakpoints;
+  const location = useLocation();
+  const category = location.state?.category ?? null;
   const isEdit = category != null;
+  
+  const { values: br } = breakpoints;
   const categoryIdValue = !isEdit ? 0 : category.id;
   const userIdValue = authService.getUserId();
   const title = isEdit ? "Edycja kategori" : "Nowa kategoria";
@@ -49,17 +49,42 @@ function CategoryForm({ category = null }) {
   const { formId, formField, errors } = form;
   const { categoryId, userId, name, type, color, icon } = formField;
 
+  const initialValues = {
+    id: category?.id || 0,
+    userId: userIdValue,
+    categoryId: categoryIdValue,
+    name: category?.name || "",
+    type: category?.type || "",
+    color: category?.color || "",
+    icon: category?.icon || "",
+  };
+
+  console.log(initialValues);
+
   const handleSubmit = (values, actions) => {
-    categoryService
-          .addCategory(values)
+    if(isEdit) {
+      categoryService
+          .editCategory(values)
           .then((data) => {
-            localStorage.setItem("APP_NOTIFY_MESSAGE_SUCCESS", "Utworzono użytkownika.");
+            localStorage.setItem("APP_NOTIFY_MESSAGE_SUCCESS", "Zaktualizowano kategorię");
             navigate("/finance/categories");
           })
           .catch((err) => {
             actions.setSubmitting(false);
             showError(err.message);
           });
+    } else {
+      categoryService
+          .addCategory(values)
+          .then((data) => {
+            localStorage.setItem("APP_NOTIFY_MESSAGE_SUCCESS", "Dodano kategorię.");
+            navigate("/finance/categories");
+          })
+          .catch((err) => {
+            actions.setSubmitting(false);
+            showError(err.message);
+          });
+    }
   };
 
   return (
@@ -70,7 +95,7 @@ function CategoryForm({ category = null }) {
           <Grid item xs={12} lg={7}>
             <SoftBox mb={3} p={1}>
               <SoftTypography
-                variant={window.innerWidth < values.sm ? "h3" : "h2"}
+                variant={window.innerWidth < br.sm ? "h3" : "h2"}
                 textTransform="none"
                 fontWeight="bold"
               >
@@ -83,16 +108,12 @@ function CategoryForm({ category = null }) {
           <Grid item xs={12} lg={9}>
             <Formik
               initialValues={initialValues}
+              enableReinitialize={true}
               validationSchema={validations}
               onSubmit={handleSubmit}
             >
-              {({ values, errors, touched, isSubmitting, setFieldValue }) => {
-                useEffect(() => {
-                  setFieldValue(categoryId.name, categoryIdValue);
-                  setFieldValue(userId.name, userIdValue);
-                }, [categoryIdValue, userIdValue, setFieldValue])
+              {({ values, errors, touched, isSubmitting, setFieldValue }) => (
 
-              return (
                 <Form id={formId} autoComplete="off">
                   <Card sx={{ overflow: "visible" }}>
                     <SoftBox p={2} lineHeight={1}>
@@ -139,6 +160,7 @@ function CategoryForm({ category = null }) {
                           error={errors.type && touched.type}
                           success={values.type.length > 0 && !errors.type}
                           options={typeOptions}
+                          value={typeOptions.find(opt => opt.value === values.type) || null}
                           onChange={(selectedOption) => {
                             setFieldValue(type.name, selectedOption ? selectedOption.value : "");
                           }}
@@ -164,6 +186,7 @@ function CategoryForm({ category = null }) {
                           error={errors.color && touched.color}
                           success={values.color.length > 0 && !errors.color}
                           options={colorOptions}
+                          value={colorOptions.find(opt => opt.value === values.color) || null}
                           onChange={(selectedOption) => {
                             setFieldValue(color.name, selectedOption ? selectedOption.value : "");
                           }}
@@ -189,6 +212,7 @@ function CategoryForm({ category = null }) {
                           error={errors.icon && touched.icon}
                           success={values.icon.length > 0 && !errors.icon}
                           options={iconOptions}
+                          value={iconOptions.find(opt => opt.value === values.icon) || null}
                           onChange={(selectedOption) => {
                             setFieldValue(icon.name, selectedOption ? selectedOption.value : "");
                           }}
@@ -213,8 +237,7 @@ function CategoryForm({ category = null }) {
                     </SoftBox>
                   </Card>
                 </Form>
-                );
-              }}
+              )}
             </Formik>
           </Grid>
         </Grid>
@@ -224,7 +247,4 @@ function CategoryForm({ category = null }) {
       );
 }
 
-CategoryForm.propTypes = {
-  category: PropTypes.object
-};
 export default CategoryForm;

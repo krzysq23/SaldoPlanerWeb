@@ -108,7 +108,7 @@ const routes = [
       }
     ]
   },
-  { type: "title", title: "Ustawienia", key: "title-settings" },
+  { type: "title", title: "Ustawienia", key: "title-settings2" },
   { type: "divider", key: "divider-2" },
   {
     type: "collapse",

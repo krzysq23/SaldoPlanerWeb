@@ -45,7 +45,7 @@ function Categories() {
       categoryService
             .getAllCategories()
             .then((data) => {
-              const tableData = dataTableUtils.generateCategoriesTableData(data, removeHandler, editHandler);
+              const tableData = dataTableUtils.generateCategoriesTableData(data, removeHandler);
               setCategories(tableData);
               setFilteredCategories(tableData.rows);
             })
@@ -91,10 +91,6 @@ function Categories() {
                 });
             }
           });
-  }
-
-  const editHandler = (data) => {
-    alert("edycja")
   }
 
   const openMenu = (event) => setMenu(event.currentTarget);

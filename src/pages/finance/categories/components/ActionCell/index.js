@@ -10,13 +10,13 @@ import Tooltip from "@mui/material/Tooltip";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
-function ActionCell({ category, removeHandler, editHandler }) {
+function ActionCell({ category, removeHandler }) {
 
   return (
     <SoftBox display="flex" alignItems="center">
       <SoftBox mx={2}>
         <SoftTypography variant="body1" color="secondary" sx={{ cursor: "pointer", lineHeight: 0 }}>
-          <Link to="#" onClick={() => editHandler(category)}>
+          <Link to="/finance/categories/form" state={{ category }}>
             <Tooltip title="Edycja" placement="top">
               <Icon>edit</Icon>
             </Tooltip>
@@ -36,8 +36,7 @@ function ActionCell({ category, removeHandler, editHandler }) {
 
 ActionCell.propTypes = {
   category: PropTypes.object.isRequired,
-  removeHandler: PropTypes.func.isRequired,
-  editHandler: PropTypes.func.isRequired,
+  removeHandler: PropTypes.func.isRequired
 };
 
 export default ActionCell;

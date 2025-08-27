@@ -53,6 +53,21 @@ class CategoryService {
     return await response.json();
   }
 
+  async editCategory(category: Category): Promise<Response> {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_EDIT_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(category)
+    });
+
+    await handleResponse(response, "Błąd podczas edycji kategorii");
+
+    return await response.json();
+  }
+
 }
 
 const categoryService = new CategoryService();
