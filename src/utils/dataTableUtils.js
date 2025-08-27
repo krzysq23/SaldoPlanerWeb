@@ -4,6 +4,8 @@ import ActionCellCategory from "pages/finance/categories/components/ActionCell";
 import SoftBadge from "components/SoftBadge";
 import Icon from "@mui/material/Icon";
 
+import { typeLabels } from "pages/finance/categories/schemas/options";
+
 class DataTableUtils {
 
   generateClientTableData(users, removeUserHandler, changePasswordHandler) {
@@ -29,11 +31,6 @@ class DataTableUtils {
   };
 
   generateCategoriesTableData(categories, removeHandler, editHandler) {
-
-    const typeLabels = {
-      INCOME: "Przychody",
-      EXPENSE: "Rozchody",
-    };
 
     return {
       columns: [

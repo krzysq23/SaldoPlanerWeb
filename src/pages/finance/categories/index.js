@@ -27,6 +27,8 @@ import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 import DataTable from "layouts/Tables/DataTable";
 
+import { typeLabels } from "pages/finance/categories/schemas/options";
+
 import categoryService from "services/category/categoryService";
 import dataTableUtils from "utils/dataTableUtils";
 
@@ -36,13 +38,16 @@ function Categories() {
   const { showSuccess, showError } = useNotify();
   const [menu, setMenu] = useState(null);
   const [categories, setCategories] = useState({ columns: [], rows: [] });
+  const [filteredCategories, setFilteredCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       categoryService
             .getAllCategories()
             .then((data) => {
-              setCategories(dataTableUtils.generateCategoriesTableData(data, removeHandler, editHandler));
+              const tableData = dataTableUtils.generateCategoriesTableData(data, removeHandler, editHandler);
+              setCategories(tableData);
+              setFilteredCategories(tableData.rows);
             })
             .catch((err) => {
               showError(err.message);
@@ -51,8 +56,16 @@ function Categories() {
     fetchCategories();
   }, []);
 
+  const newSwal = Swal.mixin({
+    customClass: {
+      confirmButton: "button button-success",
+      cancelButton: "button button-error",
+    },
+    buttonsStyling: false,
+  });
+
   const removeHandler = (data) => {
-    alert("usuwanie")
+
   }
 
   const editHandler = (data) => {
@@ -60,7 +73,15 @@ function Categories() {
   }
 
   const openMenu = (event) => setMenu(event.currentTarget);
-  const closeMenu = () => setMenu(null);
+  const closeMenu = (event) => setMenu(null);
+  const handleFilter = (filterType) => {
+    const filterCategories = (filterType) ? filteredCategories.filter(c => c.type == typeLabels[filterType]) : filteredCategories;
+    setCategories(prev => ({
+      ...prev,
+      rows: filterCategories
+    }));
+    closeMenu();
+  };
 
   const renderMenu = (
     <Menu
@@ -71,10 +92,10 @@ function Categories() {
       onClose={closeMenu}
       keepMounted
     >
-      <MenuItem onClick={closeMenu}>Typ: Przychody</MenuItem>
-      <MenuItem onClick={closeMenu}>Typ: Wydatki</MenuItem>
+      <MenuItem onClick={() => handleFilter("INCOME")}>Typ: Przychody</MenuItem>
+      <MenuItem onClick={() => handleFilter("EXPENSE")}>Typ: Wydatki</MenuItem>
       <Divider sx={{ margin: "0.5rem 0" }} />
-      <MenuItem onClick={closeMenu}>
+      <MenuItem onClick={() => handleFilter(null)}>
         <SoftTypography variant="button" color="error" fontWeight="regular">
           Usuń filtry
         </SoftTypography>
@@ -108,7 +129,7 @@ function Categories() {
             </SoftButton>
           </Link>
           <SoftBox display="flex">
-            <SoftButton variant={menu ? "contained" : "outlined"} color="dark">
+            <SoftButton variant={menu ? "contained" : "outlined"} color="dark" onClick={openMenu}>
               Filtry&nbsp;
               <Icon>keyboard_arrow_down</Icon>
             </SoftButton>

@@ -6,6 +6,11 @@ export const typeOptions = [
   { value: "INCOME", label: <SoftTypography variant="h6" fontWeight="regular">Przychody</SoftTypography> },
   { value: "EXPENSE", label: <SoftTypography variant="h6" fontWeight="regular">Wydatki</SoftTypography> }
 ]
+export const typeLabels = {
+    INCOME: "Przychody",
+    EXPENSE: "Rozchody",
+};
+
 export const colorOptions = [
   { value: "success", label: <SoftBadge variant="contained" color="success" size="md" badgeContent="&nbsp;&nbsp;&nbsp;&nbsp;" container /> },
   { value: "primary", label: <SoftBadge variant="contained" color="primary" size="md" badgeContent="&nbsp;&nbsp;&nbsp;&nbsp;" container /> },
