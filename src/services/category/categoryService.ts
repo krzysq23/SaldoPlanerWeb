@@ -24,7 +24,6 @@ class CategoryService {
   }
 
   async addCategory(category: Category): Promise<Response> {
-    const userId = authService.getUserId();
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_ADD_ENDPOINT, {
       method: "POST",
       headers: {
@@ -35,6 +34,21 @@ class CategoryService {
     });
 
     await handleResponse(response, "Błąd podczas dodawania kategorii");
+
+    return await response.json();
+  }
+
+  async removeCategory(category: Category): Promise<Category[]> {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_REMOVE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(category)
+    });
+
+    await handleResponse(response, "Błąd podczas usuwania kategorii");
 
     return await response.json();
   }

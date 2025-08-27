@@ -41,6 +41,7 @@ class DataTableUtils {
         { Header: "action", accessor: "action", width: "10%" },
       ],
       rows: categories.map((category) => ({
+        id: category.id,
         name: category.name,
         type: typeLabels[category.type] || category.type,
         color: (

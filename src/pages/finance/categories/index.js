@@ -65,7 +65,32 @@ function Categories() {
   });
 
   const removeHandler = (data) => {
-
+    newSwal
+          .fire({
+            title: "Usuwanie kategori",
+            html: `Czy na pewno chcesz usunąć kategorię<br><b>${data.name}</b>?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "USUŃ",
+            cancelButtonText: "ANULUJ",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              categoryService
+                .removeCategory(data)
+                .then((resp) => {
+                  Swal.fire("Sukces!", `Kategoria ${data.name} została usunięta.`, "success");
+                  setCategories(prev => ({
+                    ...prev,
+                    rows: prev.rows.filter(category => category.id !== data.id)
+                  }));
+                  setFilteredCategories(prev => prev.filter(category => category.id !== data.id));
+                })
+                .catch((err) => {
+                  Swal.fire("Błąd!", `Nie udało się usunąć kategorii: ${data.name}`, "error");
+                });
+            }
+          });
   }
 
   const editHandler = (data) => {
@@ -136,8 +161,10 @@ function Categories() {
             {renderMenu}
           </SoftBox>
         </SoftBox>
-        <Card>
-          <DataTable table={categories} entriesPerPage={false} canSearch />
+        <Card lineHeight={1}>
+          <SoftBox p={2} lineHeight={1}>
+          </SoftBox>
+          <DataTable table={categories} entriesPerPage={false} />
         </Card>
       </SoftBox>
       <Footer />
