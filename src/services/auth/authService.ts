@@ -2,6 +2,8 @@ import { LoginCredentials, AuthResponse, RegisterCredentials, ChangePassword, Re
 
 import { handleResponse } from "../utils/apiHandler";
 
+import categoryService from "../category/categoryService";
+
 const API_URL = process.env.REACT_APP_API_URL;
   
 class AuthService {
@@ -21,6 +23,8 @@ class AuthService {
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
+    
+    categoryService.updateCacheCategories();
 
     return data;
   }

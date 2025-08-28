@@ -3,10 +3,21 @@ import { Category, Response } from "types";
 import { handleResponse } from "../utils/apiHandler";
 
 import authService from "../auth/authService";
+import categoryStore from "./categoryStore";
 
 const API_URL = process.env.REACT_APP_API_URL;
-  
+ 
 class CategoryService {
+
+  updateCacheCategories(): void {
+    this.getAllCategories()
+      .then((data) => {
+        categoryStore.setCategories(data);
+      })
+      .catch((err) => {
+        categoryStore.setCategories([]);
+      });
+  }
 
   async getAllCategories(): Promise<Category[]> {
     const userId = authService.getUserId();
@@ -35,6 +46,8 @@ class CategoryService {
 
     await handleResponse(response, "Błąd podczas dodawania kategorii");
 
+    this.updateCacheCategories();
+
     return await response.json();
   }
 
@@ -49,6 +62,8 @@ class CategoryService {
     });
 
     await handleResponse(response, "Błąd podczas usuwania kategorii");
+
+    this.updateCacheCategories();
 
     return await response.json();
   }
@@ -65,6 +80,8 @@ class CategoryService {
 
     await handleResponse(response, "Błąd podczas edycji kategorii");
 
+    this.updateCacheCategories();
+    
     return await response.json();
   }
 

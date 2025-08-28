@@ -30,6 +30,7 @@ import DataTable from "layouts/Tables/DataTable";
 import { typeLabels } from "pages/finance/categories/schemas/options";
 
 import categoryService from "services/category/categoryService";
+import categoryStore from "services/category/categoryStore";
 import dataTableUtils from "utils/dataTableUtils";
 
 function Categories() {
@@ -41,19 +42,10 @@ function Categories() {
   const [filteredCategories, setFilteredCategories] = useState([]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      categoryService
-            .getAllCategories()
-            .then((data) => {
-              const tableData = dataTableUtils.generateCategoriesTableData(data, removeHandler);
-              setCategories(tableData);
-              setFilteredCategories(tableData.rows);
-            })
-            .catch((err) => {
-              showError(err.message);
-            });
-    };
-    fetchCategories();
+    const categories = categoryStore.getCategories();
+    const tableData = dataTableUtils.generateCategoriesTableData(categories, removeHandler);
+    setCategories(tableData);
+    setFilteredCategories(tableData.rows);
   }, []);
 
   const newSwal = Swal.mixin({

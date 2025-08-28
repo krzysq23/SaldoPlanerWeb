@@ -55,8 +55,6 @@ function CategoryForm() {
     icon: category?.icon || "",
   };
 
-  console.log(initialValues);
-
   const handleSubmit = (values, actions) => {
     if(isEdit) {
       categoryService
