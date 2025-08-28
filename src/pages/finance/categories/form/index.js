@@ -16,9 +16,6 @@ import SoftTypography from "components/SoftTypography";
 import SoftSelect from "components/SoftSelect";
 import SoftButton from "components/SoftButton";
 
-// Soft UI Dashboard PRO React base styles
-import breakpoints from "assets/theme/base/breakpoints";
-
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
@@ -40,7 +37,6 @@ function CategoryForm() {
   const category = location.state?.category ?? null;
   const isEdit = category != null;
   
-  const { values: br } = breakpoints;
   const categoryIdValue = !isEdit ? 0 : category.id;
   const userIdValue = authService.getUserId();
   const title = isEdit ? "Edycja kategori" : "Nowa kategoria";
@@ -90,35 +86,22 @@ function CategoryForm() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <SoftBox py={3}>
-        <Grid container>
-          <Grid item xs={12} lg={7}>
-            <SoftBox mb={3} p={1}>
-              <SoftTypography
-                variant={window.innerWidth < br.sm ? "h3" : "h2"}
-                textTransform="none"
-                fontWeight="bold"
-              >
-                {title}
-              </SoftTypography>
-            </SoftBox>
-            </Grid>  
-          </Grid>
-          <Grid container spacing={3} justifyContent="center">
+      <SoftBox py={9} justifyContent="center">
+        <Grid container spacing={5} justifyContent="center">
           <Grid item xs={12} lg={9}>
-            <Formik
-              initialValues={initialValues}
-              enableReinitialize={true}
-              validationSchema={validations}
-              onSubmit={handleSubmit}
-            >
-              {({ values, errors, touched, isSubmitting, setFieldValue }) => (
+            <Card sx={{ overflow: "visible" }}>
+              <Formik
+                initialValues={initialValues}
+                enableReinitialize={true}
+                validationSchema={validations}
+                onSubmit={handleSubmit}
+              >
+                {({ values, errors, touched, isSubmitting, setFieldValue }) => (
 
-                <Form id={formId} autoComplete="off">
-                  <Card sx={{ overflow: "visible" }}>
+                  <Form id={formId} autoComplete="off">
                     <SoftBox p={2} lineHeight={1}>
                       <SoftTypography variant="h6" fontWeight="medium">
-                        Formularz
+                        {title}
                       </SoftTypography>
                       <SoftTypography variant="button" fontWeight="regular" color="text">
                         Uzupełnij formularz, wypełniając poniższe pola.
@@ -235,10 +218,10 @@ function CategoryForm() {
                         </SoftButton>
                       </SoftBox>
                     </SoftBox>
-                  </Card>
-                </Form>
-              )}
-            </Formik>
+                  </Form>
+                )}
+              </Formik>
+            </Card>
           </Grid>
         </Grid>
       </SoftBox>
