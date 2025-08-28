@@ -2,7 +2,7 @@ export const dateOptions = [
   { value: "month", label: "Ostatni miesiąc" },
   { value: "today", label: "Dzisiaj" },
   { value: "lastWeek", label: "Ostatni tydzień" },
-  { value: "all", label: "Cały czas" }
+  { value: "all", label: "Wszystkie" }
 ]
 
 export const typeOptions = [

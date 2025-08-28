@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNotify } from "layouts/Notify";
 
@@ -22,15 +22,46 @@ import DataTable from "layouts/Tables/DataTable";
 
 import { dateOptions, typeOptions } from "pages/finance/transactions/schemas/options";
 
+import transactionService from "services/transaction/transactionService";
+import dataTableUtils from "utils/dataTableUtils";
+
 function Transactions() {
 
+  const { showSuccess, showError } = useNotify();
   const [transactions, setTransactions] = useState({ columns: [], rows: [] });
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      transactionService
+            .getTransactions(dateOptions[0].value)
+            .then((data) => {
+              const tableData = dataTableUtils.generateTransactionsTableData(data, removeHandler);
+              setTransactions(tableData);
+            })
+            .catch((err) => {
+              showError(err.message);
+            });
+    };
+    fetchTransactions();
+  }, []);
+
+  const removeHandler = (data) => {
+  
+  }
+
+  const handleSelectDateChange = (option) => {
+    console.log(option)
+  };
+
+  const handleSelectTypeChange = (option) => {
+    console.log(option)
+  };
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        <Card lineHeight={1} m={3}>
+        <Card>
           <SoftBox my={2}>
             <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
               <SoftBox lineHeight={1}>
@@ -58,7 +89,7 @@ function Transactions() {
                       Zakres dat
                     </SoftTypography>
                   </SoftBox>
-                  <SoftSelect defaultValue={dateOptions[0]} options={dateOptions} />
+                  <SoftSelect defaultValue={dateOptions[0]} options={dateOptions} onChange={handleSelectDateChange} />
                 </Grid>
                 <Grid item xs={12} lg={5}>
                   <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
@@ -66,7 +97,7 @@ function Transactions() {
                       Rodzaj transakcji
                     </SoftTypography>
                   </SoftBox>
-                  <SoftSelect defaultValue={typeOptions[0]} options={typeOptions} />
+                  <SoftSelect defaultValue={typeOptions[0]} options={typeOptions} onChange={handleSelectTypeChange} />
                 </Grid>
               </Grid>
             </SoftBox>

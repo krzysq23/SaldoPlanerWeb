@@ -64,6 +64,27 @@ class DataTableUtils {
     };
   };
 
+  generateTransactionsTableData(transactions, removeHandler) {
+
+    return {
+      columns: [
+        { Header: "Data", accessor: "date" },
+        { Header: "Opis", accessor: "description" },
+        { Header: "Kategoria", accessor: "category" },
+        { Header: "Kwota", accessor: "amount" },
+        { Header: "action", accessor: "action", width: "10%" },
+      ],
+      rows: transactions.map((transaction) => ({
+        id: transaction.id,
+        date: transaction.date,
+        description: transaction.description,
+        category: typeLabels[transactions.type] || transactions.type,
+        amount: transaction.amount,
+        action: <ActionCellCategory transactions={transactions} removeHandler={removeHandler}/>,
+      })),
+    };
+  };
+
 }
 
 const dataTableUtils = new DataTableUtils();
