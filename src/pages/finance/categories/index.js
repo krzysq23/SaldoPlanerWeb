@@ -4,11 +4,11 @@ import { useNotify } from "layouts/Notify";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
@@ -127,40 +127,39 @@ function Categories() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <SoftBox py={2}>
-        <Grid container>
-          <Grid item xs={12} lg={7}>
-            <SoftBox mb={3} p={1}>
-              <SoftTypography
-                variant={window.innerWidth < values.sm ? "h3" : "h2"}
-                textTransform="capitalize"
-                fontWeight="bold"
-              >
-                Kategorie
-              </SoftTypography>
+      <SoftBox py={3}>
+        <Card lineHeight={1} m={3}>
+          <SoftBox my={2}>
+            <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
+              <SoftBox lineHeight={1}>
+                <SoftTypography variant="h5" fontWeight="medium">
+                  Kategorie
+                </SoftTypography>
+                <SoftTypography variant="button" fontWeight="regular" color="text">
+                  Dodawaj, edytuj i organizuj kategorie swoich wydatków i przychodów.
+                </SoftTypography>
+              </SoftBox>
+              <Stack spacing={1} direction="row">
+                <Link to="/finance/categories/form">
+                  <SoftButton variant="gradient" color="info" size="small">
+                    + NOWY <br/> KATEGORIA
+                  </SoftButton>
+                </Link>
+              </Stack>
             </SoftBox>
-          </Grid>  
-        </Grid>
-      </SoftBox>
-      <SoftBox my={2}>
-        <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-          <Link to="/finance/categories/form">
-            <SoftButton variant="gradient" color="info">
-              Nowa kategoria
-            </SoftButton>
-          </Link>
-          <SoftBox display="flex">
-            <SoftButton variant={menu ? "contained" : "outlined"} color="dark" onClick={openMenu}>
-              Filtry&nbsp;
-              <Icon>keyboard_arrow_down</Icon>
-            </SoftButton>
-            {renderMenu}
+            <SoftBox display="flex" justifyContent="flex-end" alignItems="flex-start" pr={4}>
+              <Stack mt={1} mb={2}>
+                <SoftButton variant={menu ? "contained" : "outlined"} color="dark" onClick={openMenu}>
+                  Filtry&nbsp;
+                  <Icon>keyboard_arrow_down</Icon>
+                </SoftButton>
+                {renderMenu}
+              </Stack>
+            </SoftBox>
+            <SoftBox p={2} lineHeight={1}>
+            </SoftBox>
+            <DataTable table={categories} entriesPerPage={false} />
           </SoftBox>
-        </SoftBox>
-        <Card lineHeight={1}>
-          <SoftBox p={2} lineHeight={1}>
-          </SoftBox>
-          <DataTable table={categories} entriesPerPage={false} />
         </Card>
       </SoftBox>
       <Footer />
