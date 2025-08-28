@@ -147,8 +147,9 @@ function Categories() {
                 </Link>
               </Stack>
             </SoftBox>
+            <Divider />
             <SoftBox display="flex" justifyContent="flex-end" alignItems="flex-start" pr={4}>
-              <Stack mt={1} mb={2}>
+              <Stack mt={1}>
                 <SoftButton variant={menu ? "contained" : "outlined"} color="dark" onClick={openMenu}>
                   Filtry&nbsp;
                   <Icon>keyboard_arrow_down</Icon>
