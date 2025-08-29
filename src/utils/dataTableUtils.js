@@ -3,6 +3,8 @@ import ActionCellCategory from "pages/finance/categories/components/ActionCell";
 import ActionCellTransaction from "pages/finance/transactions/components/ActionCell";
 
 import SoftBox from "components/SoftBox";
+import SoftTypography from "components/SoftTypography";
+
 import Icon from "@mui/material/Icon";
 
 import { typeLabels } from "pages/finance/categories/schemas/options";
@@ -71,6 +73,7 @@ class DataTableUtils {
   generateTransactionsTableData(transactions, removeHandler) {
 
     const categories = categoryStore.getCategories()
+    // KOlorowabie amout zielony czerowny!
     return {
       columns: [
         { Header: "Data", accessor: "date" },
@@ -79,14 +82,20 @@ class DataTableUtils {
         { Header: "Kwota (zł.)", accessor: "amount" },
         { Header: "action", accessor: "action", width: "10%" },
       ],
-      rows: transactions.map((transaction) => ({
-        id: transaction.id,
-        date: transaction.date,
-        description: transaction.description,
-        category: categories.find((c) => c.id === transaction.categoryId)?.name,
-        amount: transaction.amount,
-        action: <ActionCellTransaction transaction={transaction} removeHandler={removeHandler}/>,
-      })),
+      rows: transactions.map((transaction) => {
+        const category = categories.find(c => c.id === transaction.categoryId);
+        return {
+          id: transaction.id,
+          type: category?.type,
+          date: transaction.date,
+          description: transaction.description,
+          category: category?.name,
+          amount: category?.type == "INCOME" 
+                    ? <SoftTypography variant="inherit" color="success"> + {transaction.amount} zł.</SoftTypography>
+                    : <SoftTypography variant="inherit" color="error"> - {transaction.amount} zł.</SoftTypography>,
+          action: <ActionCellTransaction transaction={transaction} removeHandler={removeHandler}/>,
+        };
+      }),
     };
   };
 

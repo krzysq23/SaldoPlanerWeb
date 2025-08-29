@@ -31,21 +31,26 @@ import dataTableUtils from "utils/dataTableUtils";
 function Transactions() {
 
   const { showSuccess, showError } = useNotify();
-  const [transactions, setTransactions] = useState({ columns: [], rows: [] });
+  const [ dateRange, setDateRange ] = useState(dateOptions[0].value);
+  const [ selectedType, setSelectedType ] = useState(typeOptions[0]);
+  const [ tableData, setTableData ] = useState({ columns: [], rows: [] });
+  const [ transactions, setTransactions ] = useState([]);
+
+  const fetchTransactions = async (range) => {
+    transactionService
+          .getTransactions(range)
+          .then((data) => {
+            const tableData = dataTableUtils.generateTransactionsTableData(data, removeHandler);
+            setTableData(tableData);
+            setTransactions(tableData.rows);
+          })
+          .catch((err) => {
+            showError(err.message);
+          });
+  };
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      transactionService
-            .getTransactions(dateOptions[0].value)
-            .then((data) => {
-              const tableData = dataTableUtils.generateTransactionsTableData(data, removeHandler);
-              setTransactions(tableData);
-            })
-            .catch((err) => {
-              showError(err.message);
-            });
-    };
-    fetchTransactions();
+    fetchTransactions(dateRange);
   }, []);
 
   const newSwal = Swal.mixin({
@@ -85,11 +90,19 @@ function Transactions() {
   }
 
   const handleSelectDateChange = (option) => {
-    console.log(option)
+    if(option.value == dateRange) return;
+    setDateRange(option.value);
+    setSelectedType(typeOptions[0]);
+    fetchTransactions(option.value);
   };
 
   const handleSelectTypeChange = (option) => {
-    console.log(option)
+    setSelectedType(option);
+    const filterTransactions = (option.value != "ALL") ? transactions.filter(c => c.type == option.value) : transactions;
+    setTableData(prev => ({
+      ...prev,
+      rows: filterTransactions
+    }));
   };
 
   return (
@@ -132,12 +145,12 @@ function Transactions() {
                       Rodzaj transakcji
                     </SoftTypography>
                   </SoftBox>
-                  <SoftSelect defaultValue={typeOptions[0]} options={typeOptions} onChange={handleSelectTypeChange} />
+                  <SoftSelect value={selectedType} options={typeOptions} onChange={handleSelectTypeChange} />
                 </Grid>
               </Grid>
             </SoftBox>
             <Divider />
-            <DataTable table={transactions} canSearch />
+            <DataTable table={tableData} canSearch />
           </SoftBox>
         </Card>
       </SoftBox>
