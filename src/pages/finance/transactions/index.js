@@ -20,6 +20,9 @@ import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 import DataTable from "layouts/Tables/DataTable";
 
+// sweetalert2 components
+import Swal from "sweetalert2";
+
 import { dateOptions, typeOptions } from "pages/finance/transactions/schemas/options";
 
 import transactionService from "services/transaction/transactionService";
@@ -45,8 +48,40 @@ function Transactions() {
     fetchTransactions();
   }, []);
 
+  const newSwal = Swal.mixin({
+    customClass: {
+      confirmButton: "button button-success",
+      cancelButton: "button button-error",
+    },
+    buttonsStyling: false,
+  });
+
   const removeHandler = (data) => {
-  
+    newSwal
+      .fire({
+        title: "Usuwanie kategori",
+        html: `Czy na pewno chcesz usunąć transakcję<br><b>${data.description}</b>?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "USUŃ",
+        cancelButtonText: "ANULUJ",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          transactionService
+            .removeTransaction(data)
+            .then((resp) => {
+              Swal.fire("Sukces!", `Transakcja ${data.description} została usunięta.`, "success");
+              setTransactions(prev => ({
+                ...prev,
+                rows: prev.rows.filter(transaction => transaction.id !== data.id)
+              }));
+            })
+            .catch((err) => {
+              Swal.fire("Błąd!", `Nie udało się usunąć Transakcji: ${data.description}`, "error");
+            });
+        }
+      });
   }
 
   const handleSelectDateChange = (option) => {

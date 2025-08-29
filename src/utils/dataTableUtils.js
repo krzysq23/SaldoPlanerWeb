@@ -1,10 +1,13 @@
 import ActionCellUser from "pages/settings/users/components/ActionCell";
 import ActionCellCategory from "pages/finance/categories/components/ActionCell";
+import ActionCellTransaction from "pages/finance/transactions/components/ActionCell";
 
 import SoftBox from "components/SoftBox";
 import Icon from "@mui/material/Icon";
 
 import { typeLabels } from "pages/finance/categories/schemas/options";
+
+import categoryStore from "services/category/categoryStore";
 
 class DataTableUtils {
 
@@ -67,21 +70,22 @@ class DataTableUtils {
 
   generateTransactionsTableData(transactions, removeHandler) {
 
+    const categories = categoryStore.getCategories()
     return {
       columns: [
         { Header: "Data", accessor: "date" },
         { Header: "Opis", accessor: "description" },
         { Header: "Kategoria", accessor: "category" },
-        { Header: "Kwota", accessor: "amount" },
+        { Header: "Kwota (zł.)", accessor: "amount" },
         { Header: "action", accessor: "action", width: "10%" },
       ],
       rows: transactions.map((transaction) => ({
         id: transaction.id,
         date: transaction.date,
         description: transaction.description,
-        category: typeLabels[transactions.type] || transactions.type,
+        category: categories.find((c) => c.id === transaction.categoryId)?.name,
         amount: transaction.amount,
-        action: <ActionCellCategory transactions={transactions} removeHandler={removeHandler}/>,
+        action: <ActionCellTransaction transaction={transaction} removeHandler={removeHandler}/>,
       })),
     };
   };
