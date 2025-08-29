@@ -9,14 +9,15 @@ const API_URL = process.env.REACT_APP_API_URL;
  
 class CategoryService {
 
-  updateCacheCategories(): void {
-    this.getAllCategories()
-      .then((data) => {
-        categoryStore.setCategories(data);
-      })
-      .catch((err) => {
-        categoryStore.setCategories([]);
-      });
+  async updateCacheCategories(): Promise<boolean> {
+    try {
+      const data = await this.getAllCategories();
+      categoryStore.setCategories(data);
+      return true;
+    } catch (err) {
+      categoryStore.setCategories([]);
+      return false;
+    }
   }
 
   async getAllCategories(): Promise<Category[]> {
@@ -46,7 +47,7 @@ class CategoryService {
 
     await handleResponse(response, "Błąd podczas dodawania kategorii");
 
-    this.updateCacheCategories();
+    await this.updateCacheCategories();
 
     return await response.json();
   }
@@ -63,7 +64,7 @@ class CategoryService {
 
     await handleResponse(response, "Błąd podczas usuwania kategorii");
 
-    this.updateCacheCategories();
+    await this.updateCacheCategories();
 
     return await response.json();
   }
@@ -80,8 +81,8 @@ class CategoryService {
 
     await handleResponse(response, "Błąd podczas edycji kategorii");
 
-    this.updateCacheCategories();
-    
+    await this.updateCacheCategories();
+
     return await response.json();
   }
 

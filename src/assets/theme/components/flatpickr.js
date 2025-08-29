@@ -5,7 +5,7 @@ import colors from "assets/theme/base/colors";
 // Soft UI Dashboard PRO React helper functions
 import rgba from "assets/theme/functions/rgba";
 
-const { info, white, gradients } = colors;
+const { info, white, light, gradients } = colors;
 
 const flatpickr = {
   ".flatpickr-day:hover, .flatpickr-day:focus, .flatpickr-day.nextMonthDay:hover, .flatpickr-day.nextMonthDay:focus":
@@ -15,8 +15,8 @@ const flatpickr = {
   },
 
   ".flatpickr-day.today": {
-    background: info.main,
-    color: white.main,
+    background: light.main,
+    color: white.text,
     border: "none",
 
     "&:hover, &:focus": {
