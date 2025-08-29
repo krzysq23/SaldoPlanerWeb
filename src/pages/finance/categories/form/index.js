@@ -22,11 +22,12 @@ import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 
 import FormField from "layouts/FormField";
+import FormSelect from "layouts/FormSelect";
 
 // Schemas for form and form feilds
 import validations from "pages/finance/categories/schemas/validations";
 import form from "pages/finance/categories/schemas/form";
-import { typeLabels, typeOptions, colorOptions, iconOptions } from "pages/finance/categories/schemas/options";
+import { typeOptions, iconOptions } from "pages/finance/categories/schemas/options";
 
 import authService from "services/auth/authService";
 import categoryService from "services/category/categoryService";
@@ -51,7 +52,7 @@ function CategoryForm() {
     categoryId: categoryIdValue,
     name: category?.name || "",
     type: category?.type || "",
-    color: category?.color || "",
+    color: category?.color || "#17c1e8",
     icon: category?.icon || "",
   };
 
@@ -127,15 +128,10 @@ function CategoryForm() {
                         flexDirection="column"
                         justifyContent="flex-end"
                         height="100%"
-                        mb={1.5}
                       >
-                        <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-                          <SoftTypography component="label" variant="caption" fontWeight="bold" textTransform="capitalize">
-                            Typ
-                          </SoftTypography>
-                        </SoftBox>
-                        <SoftSelect
+                        <FormSelect
                           type={type.type}
+                          label={type.label}
                           name={type.name}
                           placeholder={type.placeholder}
                           error={errors.type && touched.type}
@@ -153,24 +149,14 @@ function CategoryForm() {
                         flexDirection="column"
                         justifyContent="flex-end"
                         height="100%"
-                        mb={1.5}
                       >
-                        <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-                          <SoftTypography component="label" variant="caption" fontWeight="bold" textTransform="capitalize">
-                            Kolor
-                          </SoftTypography>
-                        </SoftBox>
-                        <SoftSelect
+                        <FormField
                           type={color.type}
+                          label={color.label}
                           name={color.name}
                           placeholder={color.placeholder}
                           error={errors.color && touched.color}
                           success={values.color.length > 0 && !errors.color}
-                          options={colorOptions}
-                          value={colorOptions.find(opt => opt.value === values.color) || null}
-                          onChange={(selectedOption) => {
-                            setFieldValue(color.name, selectedOption ? selectedOption.value : "");
-                          }}
                         />
                       </SoftBox>
 
@@ -179,15 +165,10 @@ function CategoryForm() {
                         flexDirection="column"
                         justifyContent="flex-end"
                         height="100%"
-                        mb={1.5}
                       >
-                        <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-                          <SoftTypography component="label" variant="caption" fontWeight="bold" textTransform="capitalize">
-                            Ikona
-                          </SoftTypography>
-                        </SoftBox>
-                        <SoftSelect
+                        <FormSelect
                           type={icon.type}
+                          label={icon.label}
                           name={icon.name}
                           placeholder={icon.placeholder}
                           error={errors.icon && touched.icon}

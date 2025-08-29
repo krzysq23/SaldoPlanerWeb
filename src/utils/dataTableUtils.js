@@ -1,7 +1,7 @@
 import ActionCellUser from "pages/settings/users/components/ActionCell";
 import ActionCellCategory from "pages/finance/categories/components/ActionCell";
 
-import SoftBadge from "components/SoftBadge";
+import SoftBox from "components/SoftBox";
 import Icon from "@mui/material/Icon";
 
 import { typeLabels } from "pages/finance/categories/schemas/options";
@@ -45,13 +45,14 @@ class DataTableUtils {
         name: category.name,
         type: typeLabels[category.type] || category.type,
         color: (
-          <SoftBadge
-            variant="contained"
+          <SoftBox
             color={category.color}
-            size="md"
-            badgeContent="&nbsp;&nbsp;&nbsp;&nbsp;"
-            container
-          />
+            bgColor={category.color}
+            variant="contained"
+            borderRadius="lg"
+            shadow="lg"
+            p={1}
+          >&nbsp;&nbsp;&nbsp;&nbsp;</SoftBox>
         ),
         icon: (
           <Icon 

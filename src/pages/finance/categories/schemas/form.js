@@ -26,7 +26,7 @@ const form = {
     color: {
       name: "color",
       label: "Kolor",
-      type: "select",
+      type: "color",
       placeholder: "Wybierz kolor",
       errorMsg: "Wybierz kolor"
     },
