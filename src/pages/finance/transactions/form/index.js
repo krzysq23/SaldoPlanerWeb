@@ -149,6 +149,7 @@ function TransactionForm() {
                       >
                         <FormSelect
                           type={categoryId.type}
+                          label={categoryId.label}
                           name={categoryId.name}
                           placeholder={categoryId.placeholder}
                           error={errors.categoryId && touched.categoryId}

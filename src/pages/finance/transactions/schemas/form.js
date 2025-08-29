@@ -7,6 +7,7 @@ const form = {
     },
     categoryId: {
       name: "categoryId",
+      label: "Kategoria",
       type: "text"
     },
     userId: {
@@ -15,7 +16,7 @@ const form = {
     },
     amount: {
       name: "amount",
-      label: "Wartość",
+      label: "Kwota (Zł.)",
       type: "number",
       placeholder: "10.00",
       errorMsg: "Wprowadź poprawną wartość transakcji.",
