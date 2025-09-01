@@ -77,7 +77,8 @@ function Transactions() {
             .removeTransaction(data)
             .then((resp) => {
               Swal.fire("Sukces!", `Transakcja ${data.description} została usunięta.`, "success");
-              setTransactions(prev => ({
+              setTransactions(prev => prev.filter(transaction => transaction.id !== data.id));
+              setTableData(prev => ({
                 ...prev,
                 rows: prev.rows.filter(transaction => transaction.id !== data.id)
               }));

@@ -1,9 +1,11 @@
 import ActionCellUser from "pages/settings/users/components/ActionCell";
 import ActionCellCategory from "pages/finance/categories/components/ActionCell";
 import ActionCellTransaction from "pages/finance/transactions/components/ActionCell";
+import ActionCellBudget from "pages/finance/budgets/components/ActionCell";
 
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import SoftProgress from "components/SoftProgress";
 
 import Icon from "@mui/material/Icon";
 
@@ -73,7 +75,6 @@ class DataTableUtils {
   generateTransactionsTableData(transactions, removeHandler) {
 
     const categories = categoryStore.getCategories()
-    // KOlorowabie amout zielony czerowny!
     return {
       columns: [
         { Header: "Data", accessor: "date" },
@@ -94,6 +95,37 @@ class DataTableUtils {
                     ? <SoftTypography variant="inherit" color="success"> + {transaction.amount} zł.</SoftTypography>
                     : <SoftTypography variant="inherit" color="error"> - {transaction.amount} zł.</SoftTypography>,
           action: <ActionCellTransaction transaction={transaction} removeHandler={removeHandler}/>,
+        };
+      }),
+    };
+  };
+
+  generateBudgetsTableData(budgets, removeHandler) {
+
+    const categories = categoryStore.getCategories()
+    return {
+      columns: [
+        { Header: "Kategoria", accessor: "category" },
+        { Header: "Kwota budżetu", accessor: "amountLimit" },
+        { Header: "Wydane", accessor: "amountSpent" },
+        { Header: "Pozostało", accessor: "amountRemaining" },
+        { Header: "Progress", accessor: "progress" },
+        { Header: "action", accessor: "action", width: "10%" }
+      ],
+      rows: budgets.map((budget) => {
+        const category = categories.find(c => c.id === budget.categoryId);
+        return {
+          id: budget.id,
+          category: category?.name,
+          amountLimit: budget.amountLimit + " zł",
+          amountSpent: budget.amountSpent,
+          amountRemaining: budget.amountRemaining,
+          progress: (
+            <SoftBox width="8rem">
+              <SoftProgress variant="gradient" value={80} color="success" />
+            </SoftBox>
+          ),
+          action: <ActionCellBudget budget={budget} removeHandler={removeHandler}/>,
         };
       }),
     };

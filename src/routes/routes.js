@@ -16,6 +16,7 @@ import AddUser from "pages/settings/users/new";
 import EditUser from "pages/settings/users/edit";
 import CategoryForm from "pages/finance/categories/form";
 import TransactionForm from "pages/finance/transactions/form";
+import BudgetForm from "pages/finance/budgets/form";
 
 // Soft UI Dashboard PRO React icons
 import Shop from "layouts/Icons/Shop";
@@ -153,7 +154,7 @@ const routes = [
     key: "category",
     collapse: [
       {
-        name: "Użytkownicy",
+        name: "Kategorie",
         key: "categoryForm",
         route: "/finance/categories/form",
         component: <CategoryForm />,
@@ -165,10 +166,22 @@ const routes = [
     key: "transaction",
     collapse: [
       {
-        name: "Użytkownicy",
+        name: "Transakcje",
         key: "transactionForm",
         route: "/finance/transactions/form",
         component: <TransactionForm />,
+      }
+    ]
+  },
+  {
+    name: "Budżety",
+    key: "budget",
+    collapse: [
+      {
+        name: "Budżet",
+        key: "budgetForm",
+        route: "/finance/budgets/form",
+        component: <BudgetForm />,
       }
     ]
   },
