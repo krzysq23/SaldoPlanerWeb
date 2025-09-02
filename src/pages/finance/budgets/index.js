@@ -37,9 +37,9 @@ function Budgets() {
   const [ selectedCategory, setSelectedCategory ] = useState("");
   const [ tableData, setTableData ] = useState({ columns: [], rows: [] });
   const [ budgets, setBudgets ] = useState([]);
-  const [ totalBudget, setTotalBudget ] = useState(4500);
-  const [ spent, setSpent ] = useState(3900);
-  const [ remaining, setRemaining ] = useState(570);
+  const [ totalLimit, setTotalLimit ] = useState(0);
+  const [ totalSpent, setTotalSpent ] = useState(0);
+  const [ totalRemaining, setTotalRemaining ] = useState(0);
 
   const categoryOptions = categoryStore.getCategories().map((category) => ( 
     { value: category.id, label: category.name }
@@ -49,7 +49,10 @@ function Budgets() {
     budgetService
           .getBudgets()
           .then((data) => {
-            const tableData = dataTableUtils.generateBudgetsTableData(data, removeHandler);
+            setTotalLimit(data.totalLimit);
+            setTotalSpent(data.totalSpent);
+            setTotalRemaining(data.totalRemaining);
+            const tableData = dataTableUtils.generateBudgetsTableData(data.budgets, removeHandler);
             setTableData(tableData);
             setBudgets(tableData.rows);
           })
@@ -158,13 +161,13 @@ function Budgets() {
             <Divider />
             <Grid container spacing={3} mt={1} mb={3} justifyContent="center" >
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={totalBudget} prefix="zł." title="Łączny budżet" />
+                <OutlinedCounterCard count={totalLimit} prefix="zł." title="Łączny budżet" />
               </Grid>
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={spent} prefix="zł." title="Wydano" />
+                <OutlinedCounterCard count={totalSpent} prefix="zł." title="Wydano" />
               </Grid>
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={remaining} prefix="zł." title="Pozostało" />
+                <OutlinedCounterCard count={totalRemaining} prefix="zł." title="Pozostało" />
               </Grid>
             </Grid>
           </SoftBox>
