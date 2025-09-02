@@ -1,6 +1,5 @@
 export const periodTypes = [
-  { value: "MONTHLY", label: "Bieżący miesiąc" },
-  { value: "WEEKLY", label: "Kwartał" },
-  { value: "YEARLY", label: "Rok" },
-  { value: "ALL", label: "Wszystkie" }
+  { value: "MONTHLY", label: "Miesięczny" },
+  { value: "ONE_TIME", label: "Jednorazowy" },
+  { value: "YEARLY", label: "Roczny" },
 ]

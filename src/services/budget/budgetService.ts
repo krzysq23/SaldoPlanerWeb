@@ -8,9 +8,8 @@ const API_URL = process.env.REACT_APP_API_URL;
   
 class BudgetService {
 
-  async getBudgets(periodType: string): Promise<Budget[]> {
+  async getBudgets(periodType: string, categoryId: number): Promise<Budget[]> {
     const body = {
-      periodType: periodType,
       userId: authService.getUserId()
     }
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_ENDPOINT, {
@@ -28,6 +27,7 @@ class BudgetService {
   }
 
   async addBudget(budget: Budget): Promise<Response> {
+    budget.startDate = new Date(budget.startDate).toISOString().split("T")[0];
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_ADD_ENDPOINT, {
       method: "POST",
       headers: {
@@ -58,6 +58,7 @@ class BudgetService {
   }
 
   async editBudget(budget: Budget): Promise<Response> {
+    budget.startDate = new Date(budget.startDate).toISOString().split("T")[0];
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_EDIT_ENDPOINT, {
       method: "POST",
       headers: {

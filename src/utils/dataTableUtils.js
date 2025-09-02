@@ -6,8 +6,10 @@ import ActionCellBudget from "pages/finance/budgets/components/ActionCell";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftProgress from "components/SoftProgress";
+import SoftButton from "components/SoftButton";
 
 import Icon from "@mui/material/Icon";
+import Tooltip from "@mui/material/Tooltip";
 
 import { typeLabels } from "pages/finance/categories/schemas/options";
 
@@ -114,17 +116,29 @@ class DataTableUtils {
       ],
       rows: budgets.map((budget) => {
         const category = categories.find(c => c.id === budget.categoryId);
+        const categoryRow = ( budget.note ?
+          <SoftBox space={2}>
+            {category?.name}
+            <Tooltip title={budget.note} placement="right" arrow>
+              <SoftButton variant="outlined" color="secondary" size="small" circular iconOnly sx={{ ml: 1 }} >
+                <Icon>info</Icon>
+              </SoftButton>
+            </Tooltip>
+          </SoftBox>
+        : category?.name)
+        const progress = (<SoftBox width="8rem">
+              <SoftProgress variant="gradient" 
+                value={budget.percentSpent} 
+                color={budget.status == "OK" ? "success" : budget.status == "NEAR_LIMIT" ? "warning" : "error"} />
+            </SoftBox>
+        );
         return {
           id: budget.id,
-          category: category?.name,
+          category: categoryRow,
           amountLimit: budget.amountLimit + " zł",
           amountSpent: budget.amountSpent,
           amountRemaining: budget.amountRemaining,
-          progress: (
-            <SoftBox width="8rem">
-              <SoftProgress variant="gradient" value={80} color="success" />
-            </SoftBox>
-          ),
+          progress: progress,
           action: <ActionCellBudget budget={budget} removeHandler={removeHandler}/>,
         };
       }),

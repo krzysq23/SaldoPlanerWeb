@@ -44,23 +44,22 @@ function BudgetForm() {
   const navigate = useNavigate();
   const { showError } = useNotify();
   const { formId, formField, errors } = form;
-  const { budgetId, categoryId, userId, amountLimit, periodType, startDate, endDate } = formField;
+  const { budgetId, categoryId, userId, amountLimit, periodType, startDate, note } = formField;
 
   const categoryOptions = categoryStore.getCategories().map((category) => ( 
     { value: category.id, label: category.name }
   ))
-
-  console.log("periodTypes: ", periodTypes)
-  console.log("periodTypes[0]: ", periodTypes[0])
 
   const initialValues = {
     id: budget?.id || 0,
     userId: userIdValue,
     categoryId: budget?.categoryId || "",
     amountLimit: budget?.amountLimit || "",
-    periodType: budget?.periodTypes || "",
-    startDate: budget?.date || new Date().toISOString().split("T")[0],
-    endDate: budget?.date || new Date().toISOString().split("T")[0]
+    periodType: budget?.periodType || "",
+    startDate: budget.startDate 
+                  ? new Date(budget.startDate).getFullYear() + "-" + String(new Date(budget.startDate).getMonth() + 1).padStart(2, "0")
+                  : new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0"),
+    note: budget?.note || ""
   };
 
   const handleSubmit = (values, actions) => {
@@ -168,21 +167,19 @@ function BudgetForm() {
                           }}
                         />
                       </SoftBox>
-
+                      
                       <SoftBox
                         display="flex"
                         flexDirection="column"
                         justifyContent="flex-end"
                         height="100%"
                       >
-                        <FormDatePicker
+                        <FormField
+                          type={startDate.type}
                           label={startDate.label}
                           name={startDate.name}
-                          input={{ placeholder: startDate.placeholder }}
+                          placeholder={startDate.placeholder}
                           error={errors.startDate && touched.startDate}
-                          onChange={(newDate) => {
-                            setFieldValue(startDate.name, newDate ? newDate[0].toISOString().split("T")[0] : "");
-                          }}
                         />
                       </SoftBox>
 
@@ -192,14 +189,13 @@ function BudgetForm() {
                         justifyContent="flex-end"
                         height="100%"
                       >
-                        <FormDatePicker
-                          label={endDate.label}
-                          name={endDate.name}
-                          input={{ placeholder: endDate.placeholder }}
-                          error={errors.endDate && touched.endDate}
-                          onChange={(newDate) => {
-                            setFieldValue(endDate.name, newDate ? newDate[0].toISOString().split("T")[0] : "");
-                          }}
+                        <FormField
+                          type={note.type}
+                          label={note.label}
+                          name={note.name}
+                          placeholder={note.placeholder}
+                          error={errors.note && touched.note}
+                          multiline rows={5}
                         />
                       </SoftBox>
 

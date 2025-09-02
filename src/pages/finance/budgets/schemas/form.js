@@ -22,6 +22,7 @@ const form = {
       type: "number",
       placeholder: "1000",
       errorMsg: "Wprowadź poprawną wartość.",
+      invalidMsg: "Limit musi być większy od 0.",
     },
     periodType: {
       name: "periodType",
@@ -32,19 +33,17 @@ const form = {
     },
     startDate: {
       name: "startDate",
-      label: "Data rozpoczęcia",
-      type: "date",
-      placeholder: "Wybierz datę",
+      label: "Okres rozpoczęcia",
+      type: "month",
+      placeholder: "Wybierz datę rozpoczęcia",
       errorMsg: "Data jest wymagana.",
-      errorMatchMsg: "Niepoprawny format daty (Y-m-d).",
+      errorMatchMsg: "Niepoprawny format daty.",
     },
-    endDate: {
-      name: "endDate",
-      label: "Data zakończenia",
-      type: "date",
-      placeholder: "Wybierz datę",
-      errorMsg: "Data jest wymagana.",
-      errorMatchMsg: "Niepoprawny format daty (Y-m-d).",
+    note: {
+      name: "note",
+      label: "Notatka (Opcjonalnie)",
+      type: "text",
+      placeholder: "Notatka...",
     }
   },
 };

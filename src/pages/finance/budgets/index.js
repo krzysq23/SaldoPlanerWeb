@@ -45,9 +45,9 @@ function Budgets() {
     { value: category.id, label: category.name }
   ))
 
-  const fetchBudgets = async (periodType) => {
+  const fetchBudgets = async () => {
     budgetService
-          .getBudgets(periodType)
+          .getBudgets()
           .then((data) => {
             const tableData = dataTableUtils.generateBudgetsTableData(data, removeHandler);
             setTableData(tableData);
@@ -59,7 +59,7 @@ function Budgets() {
   };
 
   useEffect(() => {
-    fetchBudgets(periodTypeSelect);
+    fetchBudgets();
   }, []);
 
   const newSwal = Swal.mixin({
@@ -141,7 +141,7 @@ function Budgets() {
                       Zakres czasu
                     </SoftTypography>
                   </SoftBox>
-                  <SoftSelect defaultValue={periodTypes[0]} options={periodTypes} onChange={handlePeriodTypesChange} />
+                  <SoftSelect options={periodTypes} placeholder="Wybierz zakres czasu" onChange={handlePeriodTypesChange} />
                 </Grid>
                 <Grid item xs={12} lg={5}>
                   <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">

@@ -7,10 +7,9 @@ const {
 
 const validations = Yup.object().shape({
   [categoryId.name]: Yup.string().required(categoryId.errorMsg),
-  [amountLimit.name]: Yup.string().required(amountLimit.errorMsg),
+  [amountLimit.name]: Yup.number().required(amountLimit.errorMsg).moreThan(0, amountLimit.invalidMsg),
   [periodType.name]: Yup.string().required(periodType.errorMsg),
-  [startDate.name]: Yup.string().required(startDate.errorMsg).typeError(startDate.errorMatchMsg),
-  [endDate.name]: Yup.string().required(endDate.errorMsg).typeError(endDate.errorMatchMsg)
+  [startDate.name]: Yup.string().required(startDate.errorMsg).typeError(startDate.errorMatchMsg)
 });
 
 export default validations;

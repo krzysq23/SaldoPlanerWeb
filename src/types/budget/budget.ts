@@ -5,9 +5,9 @@ export interface Budget {
   amountLimit: string;
   amountSpent: string;
   amountRemaining: string;
-  progress: string;
   status: string;
-  periodType: "MONTHLY" | "WEEKLY" | "YEARLY" | "ALL";
+  percentSpent: number;
+  periodType: "MONTHLY" | "ONE_TIME" | "YEARLY";
   startDate: string;
   endDate: string;
   createdAt: string;
