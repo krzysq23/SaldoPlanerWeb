@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useNotify } from "layouts/Notify";
 
@@ -43,8 +43,9 @@ function BudgetForm() {
   const title = isEdit ? "Edycja budżetu" : "Nowy budżet";
   const navigate = useNavigate();
   const { showError } = useNotify();
+  const [ endDateVisible, setEndDateVisible ] = useState(false);
   const { formId, formField, errors } = form;
-  const { budgetId, categoryId, userId, amountLimit, periodType, startDate, note } = formField;
+  const { budgetId, categoryId, userId, amountLimit, periodType, startDate, endDate, note } = formField;
 
   const categoryOptions = categoryStore.getCategories().map((category) => ( 
     { value: category.id, label: category.name }
@@ -56,11 +57,21 @@ function BudgetForm() {
     categoryId: budget?.categoryId || "",
     amountLimit: budget?.amountLimit || "",
     periodType: budget?.periodType || "",
-    startDate: budget.startDate 
-                  ? new Date(budget.startDate).getFullYear() + "-" + String(new Date(budget.startDate).getMonth() + 1).padStart(2, "0")
-                  : new Date().getFullYear() + "-" + String(new Date().getMonth() + 1).padStart(2, "0"),
+    startDate: budget?.startDate || new Date().toISOString().split("T")[0],
+    endDate: budget?.endDate || new Date().toISOString().split("T")[0],
     note: budget?.note || ""
   };
+
+  function getEndDate(startDate, periodType) {
+    if (!startDate) return "";
+    const end = new Date(startDate);
+    if (periodType === "MONTHLY") {
+      end.setMonth(end.getMonth() + 1);
+    } else if (periodType === "YEARLY") {
+      end.setFullYear(end.getFullYear() + 1);
+    }
+    return end.toISOString().split("T")[0];
+  }
 
   const handleSubmit = (values, actions) => {
     if(isEdit) {
@@ -164,6 +175,8 @@ function BudgetForm() {
                           value={periodTypes.find(opt => opt.value === values.periodType) || null}
                           onChange={(selectedOption) => {
                             setFieldValue(periodType.name, selectedOption ? selectedOption.value : "");
+                            setFieldValue(endDate.name, getEndDate(values.startDate, selectedOption.value));
+                            selectedOption.value == "ONE_TIME" ? setEndDateVisible(true) : setEndDateVisible(false);
                           }}
                         />
                       </SoftBox>
@@ -174,14 +187,38 @@ function BudgetForm() {
                         justifyContent="flex-end"
                         height="100%"
                       >
-                        <FormField
-                          type={startDate.type}
+                        <FormDatePicker
                           label={startDate.label}
                           name={startDate.name}
-                          placeholder={startDate.placeholder}
+                          input={{ placeholder: startDate.placeholder }}
                           error={errors.startDate && touched.startDate}
+                          success={values.startDate.length > 0 && !errors.startDate}
+                          onChange={(newDate) => {
+                            setFieldValue(startDate.name, newDate[0] ? newDate[0].toISOString().split("T")[0] : "");
+                            setFieldValue(endDate.name, getEndDate(newDate[0], values.periodType));
+                          }}
                         />
                       </SoftBox>
+
+                      {endDateVisible && (
+                        <SoftBox
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="flex-end"
+                          height="100%"
+                        >
+                          <FormDatePicker
+                            label={endDate.label}
+                            name={endDate.name}
+                            input={{ placeholder: endDate.placeholder }}
+                            error={errors.endDate && touched.endDate}
+                            success={values.endDate.length > 0 && !errors.endDate}
+                            onChange={(newDate) => {
+                              setFieldValue(endDate.name, newDate ? newDate[0].toISOString().split("T")[0] : "");
+                            }}
+                          />
+                        </SoftBox>
+                      )}
 
                       <SoftBox
                         display="flex"

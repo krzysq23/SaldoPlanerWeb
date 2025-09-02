@@ -34,8 +34,17 @@ const form = {
     startDate: {
       name: "startDate",
       label: "Okres rozpoczęcia",
-      type: "month",
+      type: "date",
       placeholder: "Wybierz datę rozpoczęcia",
+      errorMsg: "Data jest wymagana.",
+      errorMatchMsg: "Niepoprawny format daty.",
+      errorStartBefore: "Data rozpoczęcia musi być przed datą zakończenia."
+    },
+    endDate: {
+      name: "endDate",
+      label: "Okres zakończenia",
+      type: "date",
+      placeholder: "Wybierz datę zakończenia",
       errorMsg: "Data jest wymagana.",
       errorMatchMsg: "Niepoprawny format daty.",
     },
