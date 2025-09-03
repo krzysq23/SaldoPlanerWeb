@@ -157,7 +157,7 @@ function Budgets() {
               </Grid>
             </SoftBox>
             <Divider />
-            <DataTable table={tableData} canSearch entriesPerPage={false} />
+            <DataTable table={tableData} canSearch entriesPerPage={{ defaultValue: 15 }} />
             <Divider />
             <Grid container spacing={3} mt={1} mb={3} justifyContent="center" >
               <Grid item xs={6} lg={3}>

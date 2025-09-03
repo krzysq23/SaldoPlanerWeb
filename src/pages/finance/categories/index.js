@@ -151,7 +151,7 @@ function Categories() {
             </SoftBox>
             <SoftBox p={2} lineHeight={1}>
             </SoftBox>
-            <DataTable table={categories} entriesPerPage={false} />
+            <DataTable table={categories} entriesPerPage={{ defaultValue: 15 }} />
           </SoftBox>
         </Card>
       </SoftBox>

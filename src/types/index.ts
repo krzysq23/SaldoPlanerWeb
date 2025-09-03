@@ -7,3 +7,4 @@ export * from "./client/client";
 export * from "./category/category";
 export * from "./transaction/transaction"
 export * from "./budget/budget"
+export * from "./financialGoal/FinancialGoal"

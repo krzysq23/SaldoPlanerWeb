@@ -19,6 +19,7 @@ function PlaceholderCard({ icon = "add", title, hasBorder = false, outlined = fa
         backgroundColor: outlined && "transparent",
         boxShadow: outlined && "none",
         border: hasBorder || outlined ? `${borderWidth[1]} solid ${borderColor}` : "none",
+        minHeight: "200px"
       })}
     >
       <SoftBox
