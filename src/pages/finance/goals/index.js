@@ -1,12 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useNotify } from "layouts/Notify";
 
 // @mui material components
-import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Divider from "@mui/material/Divider";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Button, Modal, Typography } from "@mui/material";
@@ -14,35 +10,24 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-import SoftButton from "components/SoftButton";
-import SoftSelect from "components/SoftSelect";
 
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
-import ComplexProjectCard from "layouts/Cards/ProjectCards/ComplexProjectCard";
+import FinancialGoalCard from "layouts/Cards/FinancialGoalCard";
 import PlaceholderCard from "layouts/Cards/PlaceholderCard";
 
-import logoSlack from "assets/images/small-logos/logo-slack.svg";
+import Swal from 'sweetalert2'
 
 import financialGoalService from "services/financialGoal/financialGoalService";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import FinancialGoalForm from "./form"
 
 function Goals() {
 
   const [ financialGoals, setFinancialGoals ] = useState([]);
+  const [ selectedGoal, setSelectedGoal ] = useState(null);
   const { showSuccess, showError } = useNotify();
 
   const fetchFinancialGoal = async () => {
@@ -60,28 +45,70 @@ function Goals() {
     fetchFinancialGoal();
   }, []);
 
-  const [menuState, setMenuState] = useState({ anchorEl: null, menuId: null });
+  const [menuState, setMenuState] = useState({ anchorEl: null, financialGoal: null });
 
-  const openDropdownHandler = (event, id) => {
+  const openDropdownHandler = (event, goal) => {
     setMenuState({
       anchorEl: event.currentTarget,
-      menuId: id
+      financialGoal: goal
     });
   };
 
   const closeDropdownHandler = () => {
-    setMenuState({ anchorEl: null, menuId: null });
+    setMenuState({ anchorEl: null, financialGoal: null });
   };
 
   const editHandler = () => {
-    console.log("Edytuj element:", menuState.menuId);
     closeDropdownHandler();
+    setSelectedGoal(menuState.financialGoal);
+    setOpenModal(true);
   };
 
+  const newSwal = Swal.mixin({
+    customClass: {
+      confirmButton: "button button-success",
+      cancelButton: "button button-error",
+    },
+    buttonsStyling: false,
+  });
+
   const removeHandler = () => {
-    console.log("Usuń element:", menuState.menuId);
+    const goal = menuState.financialGoal;
     closeDropdownHandler();
+    newSwal
+      .fire({
+        title: "Usuwanie kategori",
+        html: `Czy na pewno chcesz usunąć cel:<br><b>${goal.name}</b>?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "USUŃ",
+        cancelButtonText: "ANULUJ",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          financialGoalService
+            .removeFinancialGoal(goal)
+            .then((resp) => {
+              showSuccess(`Cel ${goal.name} został usunięty.`);
+              setFinancialGoals(prev => prev.filter(g => g.id !== goal.id));
+            })
+            .catch((err) => {
+              showError(`Nie udało się usunąć celu: ${goal.name}`);
+            });
+        }
+      });
   };
+
+  const [openModal, setOpenModal] = useState(false);
+  const closeModalHandler = () => setOpenModal(false);
+  const newGoalHandler = () => {
+    setSelectedGoal(null);
+    setOpenModal(true);
+  }
+  const saveGoalHandler  = () => {
+    fetchFinancialGoal();
+    setOpenModal(false);
+  }
 
   const renderMenu = () => (
     <Menu
@@ -97,24 +124,8 @@ function Goals() {
     </Menu>
   );
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <DashboardLayout>
-
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography variant="h6" component="h2">
-            To jest okno modalne
-          </Typography>
-          <Typography sx={{ mt: 2 }}>
-            Możesz w nim umieścić dowolną treść.
-          </Typography>
-        </Box>
-      </Modal>
-
       <DashboardNavbar />
       <SoftBox pt={5} pb={2}>
         <Grid container>
@@ -134,24 +145,37 @@ function Goals() {
           <Grid container spacing={3}>
             {financialGoals.map((goal) => (
               <Grid item xs={12} md={6} lg={4} key={goal.id}>
-                <ComplexProjectCard
-                  image={logoSlack}
-                  title={goal.description}
-                  description={goal.description}
-                  dateTime={goal.deadline}
+                <FinancialGoalCard
+                  financialGoal={goal}
                   dropdown={{
-                    action: (e) => openDropdownHandler(e, goal.id),
+                    action: (e) => openDropdownHandler(e, goal),
                     menu: renderMenu(),
                   }}
                 />
               </Grid>
             ))}
-            <Grid item xs={12} md={6} lg={4} sx={{ cursor: "pointer" }} onClick={handleOpen}>
+            <Grid item xs={12} md={6} lg={4} onClick={newGoalHandler}>
               <PlaceholderCard title={{ variant: "h5", text: "Nowy Cel Finansowy" }} />
             </Grid>
           </Grid>
         </SoftBox>
       </SoftBox>
+      <Modal open={openModal} onClose={closeModalHandler}>
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50%",
+          bgcolor: "background.paper",
+          outline: "none !important",
+          boxShadow: 24,
+          borderRadius: "1rem !important",
+          p: 4
+        }}>
+          <FinancialGoalForm financialGoal={selectedGoal} onClose={closeModalHandler} onSave={saveGoalHandler}  />
+        </Box>
+      </Modal>
       <Footer />
     </DashboardLayout>
       );

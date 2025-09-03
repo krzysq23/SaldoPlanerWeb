@@ -29,6 +29,10 @@ function PlaceholderCard({ icon = "add", title, hasBorder = false, outlined = fa
         textAlign="center"
         height="100%"
         p={3}
+        sx={{
+          cursor: "pointer",
+          "&:hover": { backgroundColor: "#f8f9fa"}
+        }}
       >
         <SoftBox color="secondary" mb={0.5}>
           <Icon fontSize="default" sx={{ fontWeight: "bold" }}>

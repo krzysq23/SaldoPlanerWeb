@@ -39,7 +39,7 @@ class FinancialGoalService {
   }
 
   async removeFinancialGoal(financialGoal: FinancialGoal): Promise<FinancialGoal[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_TRANSACTION_REMOVE_ENDPOINT, {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_REMOVE_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
