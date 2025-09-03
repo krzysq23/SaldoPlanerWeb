@@ -5,5 +5,6 @@ export interface Transaction {
   amount: string;
   date: string;
   description: string;
+  type: string;
   createdAt: string;
 }

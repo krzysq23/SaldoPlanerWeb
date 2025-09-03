@@ -7,6 +7,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import plLocale from '@fullcalendar/core/locales/pl';
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -59,6 +60,8 @@ function Calendar({ header = { title: "", date: "" }, ...rest }) {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           events={events}
           height="100%"
+          locales={[plLocale]}
+          locale="pl"
         />
       </CalendarRoot>
     </Card>

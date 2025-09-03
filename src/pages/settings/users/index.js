@@ -120,19 +120,6 @@ function UserManager() {
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        <Grid container>
-          <Grid item xs={12} lg={7}>
-            <SoftBox mb={3} p={1}>
-              <SoftTypography
-                variant={window.innerWidth < values.sm ? "h3" : "h2"}
-                textTransform="capitalize"
-                fontWeight="bold"
-              >
-              Zarządzanie użytkownikami
-            </SoftTypography>
-          </SoftBox>
-          </Grid>  
-        </Grid>
         <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
             <SoftBox lineHeight={1}>

@@ -8,7 +8,7 @@ import Categories from "pages/finance/categories";
 import Budgets from "pages/finance/budgets";
 import Goals from "pages/finance/goals";
 import Reports from "pages/finance/reports";
-import Calendar from "pages/calendar";
+import TransactionCalendar from "pages/calendar";
 import Profile from "pages/profile";
 import UserManager from "pages/settings/users";
 import AppSettings from "pages/settings/application";
@@ -89,7 +89,7 @@ const routes = [
         name: "Kalendarz",
         key: "calendar",
         route: "/calendar",
-        component: <Calendar />,
+        component: <TransactionCalendar />,
       }
     ]
   },

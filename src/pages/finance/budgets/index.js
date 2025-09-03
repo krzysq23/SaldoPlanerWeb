@@ -161,13 +161,13 @@ function Budgets() {
             <Divider />
             <Grid container spacing={3} mt={1} mb={3} justifyContent="center" >
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={totalLimit} prefix="zł." title="Łączny budżet" />
+                <OutlinedCounterCard count={totalLimit} suffix="zł." title="Łączny budżet" />
               </Grid>
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={totalSpent} prefix="zł." title="Wydano" />
+                <OutlinedCounterCard count={totalSpent} suffix="zł." title="Wydano" />
               </Grid>
               <Grid item xs={6} lg={3}>
-                <OutlinedCounterCard count={totalRemaining} prefix="zł." title="Pozostało" />
+                <OutlinedCounterCard count={totalRemaining} suffix="zł." title="Pozostało" />
               </Grid>
             </Grid>
           </SoftBox>

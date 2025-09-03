@@ -5,6 +5,13 @@ export const dateOptions = [
   { value: "all", label: "Wszystkie" }
 ]
 
+export const calendarDateOptions = [
+  { value: "month", label: "Ostatni miesiąc" },
+  { value: "lastQuarter", label: "Ostatni kwartał" },
+  { value: "lastYear", label: "Ostatni tydzień" },
+  { value: "all", label: "Wszystkie" }
+]
+
 export const typeOptions = [
   { value: "ALL", label: "Wszystkie" },
   { value: "INCOME", label: "Przychody" },
