@@ -24,6 +24,7 @@ import { calendarDateOptions, typeOptions } from "pages/finance/transactions/sch
 
 import transactionService from "services/transaction/transactionService";
 import dataCalendarUtil from "utils/dataCalendarUtil";
+import { h } from "@fullcalendar/core/preact.js";
 
 function TransactionCalendar() {
 
@@ -36,6 +37,7 @@ function TransactionCalendar() {
   const [ saldo, setSaldo ] = useState(0);
   const { showSuccess, showError } = useNotify();
   const today = new Date();
+  const [ currentMonth, setCurrentMonth] = useState(today.toISOString().slice(0, 7));
 
   const fetchTransactions = async (range) => {
     transactionService
@@ -44,6 +46,10 @@ function TransactionCalendar() {
           const transactionsData = dataCalendarUtil.transactionsCalendarData(data);
           setTransactions(transactionsData);
           setCalendarData(transactionsData);
+          const result = summaryAmounts(transactionsData, currentMonth);
+          setTotalIncomes(result.income);
+          setTotalExpenses(result.expense);
+          setSaldo(result.balance);
         })
         .catch((err) => {
           showError(err.message);
@@ -53,6 +59,18 @@ function TransactionCalendar() {
   useEffect(() => {
     fetchTransactions(dateRange);
   }, []);
+
+  const summaryAmounts = (trList, month) => {
+    return trList.reduce(
+      (acc, t) => {
+        if (t.transaction.type === "INCOME" && t.transaction.date.slice(0, 7) === month) acc.income += t.transaction.amount;
+        if (t.transaction.type === "EXPENSE" && t.transaction.date.slice(0, 7) === month) acc.expense += t.transaction.amount;
+        acc.balance = acc.income - acc.expense;
+        return acc;
+      },
+      { income: 0, expense: 0, balance: 0 }
+    );
+  };
 
   const handleSelectDateChange = (option) => {
     if(option.value == dateRange) return;
@@ -67,6 +85,21 @@ function TransactionCalendar() {
     const filterTransactions = (option.value != "ALL") ? transactions.filter(c => c.transaction.type == option.value) : transactions;
     setCalendarData(filterTransactions);
   };
+
+  const handleDateSet = (e) => {
+    const month = e.view.getCurrentData().currentDate.toISOString().slice(0,7);
+    if(month === currentMonth) return;
+    setCurrentMonth(month);
+    const result = summaryAmounts(transactions, month);
+    setTotalIncomes(result.income);
+    setTotalExpenses(result.expense);
+    setSaldo(result.balance);
+  }
+
+  const handleEventClick = (e) => {
+    const transaction = e.event.extendedProps.transaction;
+    console.log("handleEventClick", e.event.extendedProps.transaction)
+  }
 
   return (
     <DashboardLayout>
@@ -118,8 +151,10 @@ function TransactionCalendar() {
               initialDate={today}
               events={calendarData}
               selectable
+              datesSet={handleDateSet}
+              eventClick={handleEventClick}
             />
-          <Grid container spacing={3} mt={1} mb={3} justifyContent="center" >
+          <Grid container spacing={3} mt={1} mb={3} pl={1} pr={1} justifyContent="center" >
             <Grid item xs={6} lg={3}>
               <OutlinedCounterCard count={totalIncomes} suffix="zł." title="Suma przychodów" />
             </Grid>
