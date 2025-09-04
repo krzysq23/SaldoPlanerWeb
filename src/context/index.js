@@ -78,6 +78,20 @@ SoftUIControllerProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+// My custom utils
+Date.prototype.toYMD = function () {
+  const y = this.getFullYear();
+  const m = String(this.getMonth() + 1).padStart(2, "0");
+  const d = String(this.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
+Date.prototype.toYM = function () {
+  const y = this.getFullYear();
+  const m = String(this.getMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+};
+
 // Context module functions
 const setMiniSidenav = (dispatch, value) => dispatch({ type: "MINI_SIDENAV", value });
 const setTransparentSidenav = (dispatch, value) => dispatch({ type: "TRANSPARENT_SIDENAV", value });

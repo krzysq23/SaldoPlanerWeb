@@ -1,6 +1,8 @@
 import { Budget, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
+import { formatYMD } from "../../utils/dateUtil";
+
 
 import authService from "../auth/authService";
 
@@ -27,7 +29,7 @@ class BudgetService {
   }
 
   async addBudget(budget: Budget): Promise<Response> {
-    budget.startDate = new Date(budget.startDate).toISOString().split("T")[0];
+    budget.startDate = formatYMD(new Date(budget.startDate));
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_ADD_ENDPOINT, {
       method: "POST",
       headers: {
@@ -58,7 +60,7 @@ class BudgetService {
   }
 
   async editBudget(budget: Budget): Promise<Response> {
-    budget.startDate = new Date(budget.startDate).toISOString().split("T")[0];
+    budget.startDate = formatYMD(new Date(budget.startDate));
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_EDIT_ENDPOINT, {
       method: "POST",
       headers: {

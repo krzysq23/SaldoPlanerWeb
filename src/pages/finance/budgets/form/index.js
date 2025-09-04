@@ -29,6 +29,7 @@ import validations from "pages/finance/budgets/schemas/validations";
 import form from "pages/finance/budgets/schemas/form";
 import { periodTypes } from "pages/finance/budgets/schemas/options";
 
+import { formatYMD } from "utils/dateUtil";
 import authService from "services/auth/authService";
 import budgetService from "services/budget/budgetService";
 import categoryStore from "services/category/categoryStore";
@@ -57,8 +58,8 @@ function BudgetForm() {
     categoryId: budget?.categoryId || "",
     amountLimit: budget?.amountLimit || "",
     periodType: budget?.periodType || "",
-    startDate: budget?.startDate || new Date().toISOString().split("T")[0],
-    endDate: budget?.endDate || new Date().toISOString().split("T")[0],
+    startDate: budget?.startDate || formatYMD(new Date()),
+    endDate: budget?.endDate || formatYMD(new Date()),
     note: budget?.note || ""
   };
 
@@ -70,7 +71,7 @@ function BudgetForm() {
     } else if (periodType === "YEARLY") {
       end.setFullYear(end.getFullYear() + 1);
     }
-    return end.toISOString().split("T")[0];
+    return formatYMD(end);
   }
 
   const handleSubmit = (values, actions) => {
@@ -194,7 +195,7 @@ function BudgetForm() {
                           error={errors.startDate && touched.startDate}
                           success={values.startDate.length > 0 && !errors.startDate}
                           onChange={(newDate) => {
-                            setFieldValue(startDate.name, newDate[0] ? newDate[0].toISOString().split("T")[0] : "");
+                            setFieldValue(startDate.name, newDate[0] ? formatYMD(newDate[0]) : "");
                             setFieldValue(endDate.name, getEndDate(newDate[0], values.periodType));
                           }}
                         />
@@ -214,7 +215,7 @@ function BudgetForm() {
                             error={errors.endDate && touched.endDate}
                             success={values.endDate.length > 0 && !errors.endDate}
                             onChange={(newDate) => {
-                              setFieldValue(endDate.name, newDate ? newDate[0].toISOString().split("T")[0] : "");
+                              setFieldValue(endDate.name, newDate ? formatYMD(newDate[0]) : "");
                             }}
                           />
                         </SoftBox>

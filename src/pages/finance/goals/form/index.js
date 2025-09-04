@@ -21,6 +21,7 @@ import FormDatePicker from "layouts/FormDatePicker";
 import validations from "pages/finance/goals/schemas/validations";
 import form from "pages/finance/goals/schemas/form";
 
+import { formatYMD } from "utils/dateUtil";
 import authService from "services/auth/authService";
 import financialGoalService from "services/financialGoal/financialGoalService";
 import categoryStore from "services/category/categoryStore";
@@ -45,7 +46,7 @@ function FinancialGoalForm({ financialGoal, onClose, onSave }) {
     name: financialGoal?.name || "",
     targetAmount: financialGoal?.targetAmount || "",
     savedAmount: financialGoal?.savedAmount || "",
-    deadline: financialGoal?.deadline || new Date().toISOString().split("T")[0]
+    deadline: financialGoal?.deadline || formatYMD(new Date())
   };
 
   const handleSubmit = (values, actions) => {
@@ -175,7 +176,7 @@ function FinancialGoalForm({ financialGoal, onClose, onSave }) {
                   error={errors.deadline && touched.deadline}
                   success={values.deadline.length > 0 && !errors.deadline}
                   onChange={(newDate) => {
-                    setFieldValue(deadline.name, newDate ? newDate[0].toISOString().split("T")[0] : "");
+                    setFieldValue(deadline.name, newDate ? formatYMD(newDate[0]) : "");
                   }}
                 />
               </SoftBox>

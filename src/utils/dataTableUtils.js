@@ -74,7 +74,7 @@ class DataTableUtils {
     };
   };
 
-  generateTransactionsTableData(transactions, removeHandler) {
+  generateTransactionsTableData(transactions, editHandler, removeHandler) {
 
     const categories = categoryStore.getCategories()
     return {
@@ -96,7 +96,7 @@ class DataTableUtils {
           amount: category?.type == "INCOME" 
                     ? <SoftTypography variant="inherit" color="success"> + {transaction.amount} zł.</SoftTypography>
                     : <SoftTypography variant="inherit" color="error"> - {transaction.amount} zł.</SoftTypography>,
-          action: <ActionCellTransaction transaction={transaction} removeHandler={removeHandler}/>,
+          action: <ActionCellTransaction transaction={transaction} editClick={editHandler} removeClick={removeHandler}/>,
         };
       }),
     };

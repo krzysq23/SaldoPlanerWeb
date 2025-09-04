@@ -5,7 +5,7 @@ import { useNotify } from "layouts/Notify";
 import Grid from "@mui/material/Grid";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";

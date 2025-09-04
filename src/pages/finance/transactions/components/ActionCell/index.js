@@ -10,13 +10,13 @@ import Tooltip from "@mui/material/Tooltip";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
-function ActionCell({ transaction, removeHandler }) {
+function ActionCell({ transaction, editClick, removeClick }) {
 
   return (
     <SoftBox display="flex" alignItems="center">
       <SoftBox mx={2}>
         <SoftTypography variant="body1" color="secondary" sx={{ cursor: "pointer", lineHeight: 0 }}>
-          <Link to="/finance/transactions/form" state={{ transaction }}>
+          <Link to="#" onClick={() => editClick(transaction)}>
             <Tooltip title="Edycja" placement="top">
               <Icon>edit</Icon>
             </Tooltip>
@@ -24,7 +24,7 @@ function ActionCell({ transaction, removeHandler }) {
         </SoftTypography>
       </SoftBox>
       <SoftTypography variant="body1" color="secondary" sx={{ cursor: "pointer", lineHeight: 0 }}>
-        <Link to="#" onClick={() => removeHandler(transaction)}>
+        <Link to="#" onClick={() => removeClick(transaction)}>
           <Tooltip title="Usuń" placement="top">
             <Icon>delete</Icon>
           </Tooltip>
@@ -36,7 +36,8 @@ function ActionCell({ transaction, removeHandler }) {
 
 ActionCell.propTypes = {
   transaction: PropTypes.object.isRequired,
-  removeHandler: PropTypes.func.isRequired
+  editClick: PropTypes.func.isRequired,
+  removeClick: PropTypes.func.isRequired
 };
 
 export default ActionCell;

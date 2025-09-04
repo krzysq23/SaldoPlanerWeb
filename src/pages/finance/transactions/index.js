@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import { Box, Modal } from "@mui/material";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
@@ -19,6 +20,8 @@ import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import Footer from "layouts/Footer";
 import DataTable from "layouts/Tables/DataTable";
+
+import TransactionForm from "pages/finance/transactions/form";
 
 // sweetalert2 components
 import Swal from "sweetalert2";
@@ -35,12 +38,28 @@ function Transactions() {
   const [ selectedType, setSelectedType ] = useState(typeOptions[0]);
   const [ tableData, setTableData ] = useState({ columns: [], rows: [] });
   const [ transactions, setTransactions ] = useState([]);
+  const [ selectTransaction, setSelectTransaction ] = useState(null);
+  const [ openModal, setOpenModal ] = useState(false);
+
+  const newTransactionHandler = () => {
+    setSelectTransaction(null);
+    setOpenModal(true);
+  }
+
+  const saveTransactionHandler  = () => {
+    fetchTransactions(dateRange);
+    setOpenModal(false);
+  }
+
+  const closeModalHandler = () => {
+    setOpenModal(false);
+  }
 
   const fetchTransactions = async (range) => {
     transactionService
           .getTransactions(range)
           .then((data) => {
-            const tableData = dataTableUtils.generateTransactionsTableData(data, removeHandler);
+            const tableData = dataTableUtils.generateTransactionsTableData(data, editHandler, removeHandler);
             setTableData(tableData);
             setTransactions(tableData.rows);
           })
@@ -61,6 +80,11 @@ function Transactions() {
     buttonsStyling: false,
   });
 
+  const editHandler = (data) => {
+    setSelectTransaction(data);
+    setOpenModal(true);
+  }
+  
   const removeHandler = (data) => {
     newSwal
       .fire({
@@ -122,11 +146,9 @@ function Transactions() {
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
-                <Link to="/finance/transactions/form">
-                  <SoftButton variant="gradient" color="info" size="small">
-                    + DODAJ <br/> TRANSAKCJĘ
-                  </SoftButton>
-                </Link>
+                <SoftButton variant="gradient" color="info" size="small" onClick={newTransactionHandler}>
+                  + DODAJ <br/> TRANSAKCJĘ
+                </SoftButton>
               </Stack>
             </SoftBox>
             <Divider />
@@ -155,6 +177,22 @@ function Transactions() {
           </SoftBox>
         </Card>
       </SoftBox>
+      <Modal open={openModal} onClose={closeModalHandler}>
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50%",
+          bgcolor: "background.paper",
+          outline: "none !important",
+          boxShadow: 24,
+          borderRadius: "1rem !important",
+          p: 4
+        }}>
+          <TransactionForm transaction={selectTransaction} onClose={closeModalHandler} onSave={saveTransactionHandler}  />
+        </Box>
+      </Modal>
       <Footer />
     </DashboardLayout>
       );

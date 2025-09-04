@@ -6,6 +6,7 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import { Box, Modal } from "@mui/material";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox/index";
@@ -20,24 +21,29 @@ import Footer from "layouts/Footer";
 import Calendar from "layouts/Calendar";
 import OutlinedCounterCard from "layouts/Cards/CounterCards/OutlinedCounterCard";
 
+import { formatYM } from "utils/dateUtil";
+
+import TransactionForm from "pages/finance/transactions/form";
+
 import { calendarDateOptions, typeOptions } from "pages/finance/transactions/schemas/options";
 
 import transactionService from "services/transaction/transactionService";
 import dataCalendarUtil from "utils/dataCalendarUtil";
-import { h } from "@fullcalendar/core/preact.js";
 
 function TransactionCalendar() {
 
   const [ calendarData, setCalendarData ] = useState([]);
   const [ transactions, setTransactions ] = useState([]);
+  const [ selectTransaction, setSelectTransaction ] = useState(null);
   const [ dateRange, setDateRange ] = useState(calendarDateOptions[0].value);
   const [ selectedType, setSelectedType ] = useState(typeOptions[0]);
   const [ totalIncomes, setTotalIncomes ] = useState(0);
   const [ totalExpenses, setTotalExpenses ] = useState(0);
   const [ saldo, setSaldo ] = useState(0);
   const { showSuccess, showError } = useNotify();
+  const [ openModal, setOpenModal ] = useState(false);
   const today = new Date();
-  const [ currentMonth, setCurrentMonth] = useState(today.toISOString().slice(0, 7));
+  const [ currentMonth, setCurrentMonth] = useState(formatYM(today));
 
   const fetchTransactions = async (range) => {
     transactionService
@@ -87,7 +93,7 @@ function TransactionCalendar() {
   };
 
   const handleDateSet = (e) => {
-    const month = e.view.getCurrentData().currentDate.toISOString().slice(0,7);
+    const month = formatYM(e.view.getCurrentData().currentDate);
     if(month === currentMonth) return;
     setCurrentMonth(month);
     const result = summaryAmounts(transactions, month);
@@ -99,6 +105,20 @@ function TransactionCalendar() {
   const handleEventClick = (e) => {
     const transaction = e.event.extendedProps.transaction;
     console.log("handleEventClick", e.event.extendedProps.transaction)
+  }
+
+  const newTransactionHandler = () => {
+    setSelectTransaction(null);
+    setOpenModal(true);
+  }
+
+  const saveTransactionHandler  = () => {
+    fetchTransactions();
+    setOpenModal(false);
+  }
+
+  const closeModalHandler = () => {
+    setOpenModal(false);
   }
 
   return (
@@ -118,7 +138,7 @@ function TransactionCalendar() {
                 </SoftTypography>
               </SoftBox>
               <Stack spacing={1} direction="row">
-                <SoftButton variant="gradient" color="info" size="small">
+                <SoftButton variant="gradient" color="info" size="small" onClick={newTransactionHandler}>
                   + DODAJ <br/> TRANSAKCJĘ
                 </SoftButton>
               </Stack>
@@ -167,6 +187,22 @@ function TransactionCalendar() {
           </Grid>
         </Card>
       </SoftBox>
+      <Modal open={openModal} onClose={closeModalHandler}>
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50%",
+          bgcolor: "background.paper",
+          outline: "none !important",
+          boxShadow: 24,
+          borderRadius: "1rem !important",
+          p: 4
+        }}>
+          <TransactionForm transaction={selectTransaction} onClose={closeModalHandler} onSave={saveTransactionHandler}  />
+        </Box>
+      </Modal>
       <Footer />
     </DashboardLayout>
       );
