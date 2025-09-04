@@ -104,7 +104,6 @@ function TransactionCalendar() {
 
   const handleEventClick = (e) => {
     const transaction = e.event.extendedProps.transaction;
-    console.log("handleEventClick", e.event.extendedProps.transaction)
   }
 
   const newTransactionHandler = () => {
@@ -113,7 +112,7 @@ function TransactionCalendar() {
   }
 
   const saveTransactionHandler  = () => {
-    fetchTransactions();
+    fetchTransactions(dateRange);
     setOpenModal(false);
   }
 
