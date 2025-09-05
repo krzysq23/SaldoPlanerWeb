@@ -8,3 +8,4 @@ export * from "./category/category";
 export * from "./transaction/transaction"
 export * from "./budget/budget"
 export * from "./financialGoal/FinancialGoal"
+export * from "./dashboard/dashboard"

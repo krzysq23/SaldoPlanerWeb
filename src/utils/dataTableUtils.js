@@ -102,6 +102,32 @@ class DataTableUtils {
     };
   };
 
+  generateDashboardTransactionsTableData(transactions) {
+
+    const categories = categoryStore.getCategories()
+    return {
+      columns: [
+        { Header: "Data", accessor: "date" },
+        { Header: "Opis", accessor: "description" },
+        { Header: "Kategoria", accessor: "category" },
+        { Header: "Kwota (zł.)", accessor: "amount" }
+      ],
+      rows: transactions.map((transaction) => {
+        const category = categories.find(c => c.id === transaction.categoryId);
+        return {
+          id: transaction.id,
+          type: category?.type,
+          date: transaction.date,
+          description: transaction.description,
+          category: category?.name,
+          amount: category?.type == "INCOME" 
+                    ? <SoftTypography variant="inherit" color="success"> + {transaction.amount} zł.</SoftTypography>
+                    : <SoftTypography variant="inherit" color="error"> - {transaction.amount} zł.</SoftTypography>
+        };
+      }),
+    };
+  };
+
   generateBudgetsTableData(budgets, removeHandler) {
 
     const categories = categoryStore.getCategories()
