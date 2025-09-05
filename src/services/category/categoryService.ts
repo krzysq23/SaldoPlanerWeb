@@ -2,7 +2,6 @@ import { Category, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
 
-import authService from "../auth/authService";
 import categoryStore from "./categoryStore";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -21,8 +20,7 @@ class CategoryService {
   }
 
   async getAllCategories(): Promise<Category[]> {
-    const userId = authService.getUserId();
-    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_CATEGORY_ALL_ENDPOINT}/${userId}`, {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_ALL_ENDPOINT, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

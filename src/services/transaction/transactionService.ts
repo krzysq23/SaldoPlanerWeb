@@ -2,16 +2,13 @@ import { Transaction, Response } from "types";
 
 import { handleResponse } from "../utils/apiHandler";
 
-import authService from "../auth/authService";
-
 const API_URL = process.env.REACT_APP_API_URL;
   
 class TransactionService {
 
-  async getTransactions(date: string): Promise<Transaction[]> {
+  async getTransactions(range: string): Promise<Transaction[]> {
     const body = {
-      date: date,
-      userId: authService.getUserId()
+      dateRange: range
     }
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_TRANSACTION_BY_DATE_ENDPOINT, {
       method: "POST",

@@ -9,8 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 class FinancialGoalService {
 
   async getAllFinancialGoals(): Promise<FinancialGoal[]> {
-    const userId = authService.getUserId();
-    const response = await fetch(`${API_URL}` + `${process.env.REACT_APP_FINANCIAL_GOAL_BY_DATE_ENDPOINT}/${userId}`, {
+    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_BY_DATE_ENDPOINT, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

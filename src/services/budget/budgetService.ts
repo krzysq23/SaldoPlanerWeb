@@ -3,16 +3,14 @@ import { Budget, Response } from "types";
 import { handleResponse } from "../utils/apiHandler";
 import { formatYMD } from "../../utils/dateUtil";
 
-
-import authService from "../auth/authService";
-
 const API_URL = process.env.REACT_APP_API_URL;
   
 class BudgetService {
 
   async getBudgets(periodType: string, categoryId: number): Promise<Budget[]> {
     const body = {
-      userId: authService.getUserId()
+      periodType: periodType,
+      categoryId: categoryId
     }
     const response = await fetch(`${API_URL}` + process.env.REACT_APP_BUDGET_ENDPOINT, {
       method: "POST",
