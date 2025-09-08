@@ -45,7 +45,6 @@ function Default() {
           setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
           setChartData(data.chartData);
           setChartDataGraph(dataChartUtil.createTransactionsChartData(data.chartData));
-          console.log(chartDataGraph);
         })
         .catch((err) => {
           showError(err.message);
@@ -104,7 +103,10 @@ function Default() {
           <Grid container spacing={3}>
               <Grid item xs={12} sm={6} lg={12}>
                 <Card>
-                  <SoftBox p={2} mt={3}>
+                  <SoftBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
+                    <SoftTypography variant="h6">Dane z ostatniego miesiąca</SoftTypography>
+                  </SoftBox>
+                  <SoftBox p={2} mt={3} mb={3}>
                     <Grid container alignItems="center">
                       <Grid item xs={7}>
                         <PieChart chart={chartDataGraph} height="100%" />

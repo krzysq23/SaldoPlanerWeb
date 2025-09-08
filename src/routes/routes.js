@@ -32,6 +32,7 @@ const routes = [
     name: "Dashboard",
     key: "dashboard",
     icon: <Shop size="12px" />,
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Podsumowanie",
@@ -46,6 +47,7 @@ const routes = [
     name: "Finanse",
     key: "finance",
     icon: <Office size="12px" />,
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Transakcje",
@@ -84,6 +86,7 @@ const routes = [
     name: "Zarządzanie czasem",
     key: "calendar",
     icon: <SpaceShip size="12px" />,
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Kalendarz",
@@ -100,6 +103,7 @@ const routes = [
     name: "Użytkownik",
     key: "profile",
     icon: <CustomerSupport size="12px" />,
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Konto",
@@ -109,13 +113,14 @@ const routes = [
       }
     ]
   },
-  { type: "title", title: "Ustawienia", key: "title-settings2" },
-  { type: "divider", key: "divider-2" },
+  { type: "title", title: "Ustawienia", key: "title-settings2", roles: ["ADMIN"] },
+  { type: "divider", key: "divider-2", roles: ["ADMIN"] },
   {
     type: "collapse",
     name: "Ustawienia",
     key: "settings",
     icon: <Settings size="12px" />,
+    roles: ["ADMIN"],
     collapse: [
       {
         name: "Użytkownicy",
@@ -134,6 +139,7 @@ const routes = [
   {
     name: "Użytkownicy",
     key: "users",
+    roles: ["ADMIN"],
     collapse: [
       {
         name: "Użytkownicy",
@@ -152,6 +158,7 @@ const routes = [
   {
     name: "Kategorie",
     key: "category",
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Kategorie",
@@ -164,6 +171,7 @@ const routes = [
   {
     name: "Transakcje",
     key: "transaction",
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Transakcje",
@@ -176,6 +184,7 @@ const routes = [
   {
     name: "Budżety",
     key: "budget",
+    roles: ["ALL_USERS"],
     collapse: [
       {
         name: "Budżet",
@@ -188,6 +197,7 @@ const routes = [
   {
     name: "Authentication",
     key: "authentication",
+    roles: ["PUBLIC"],
     collapse: [
       {
         name: "Login",
@@ -216,6 +226,7 @@ const routes = [
       {
         name: "Error",
         key: "error",
+        roles: ["PUBLIC"],
         collapse: [
           {
             name: "Error 404",

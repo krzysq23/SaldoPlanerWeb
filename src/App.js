@@ -22,6 +22,8 @@ import { useSoftUIController, setMiniSidenav } from "context/index";
 // notify component
 import NotifyProvider from "layouts/Notify";
 
+import authService from "services/auth/authService";
+
 export default function App() {
 
   const [controller, dispatch] = useSoftUIController();
@@ -29,7 +31,8 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
 
-  const isAuthenticated = localStorage.getItem('token') != null && localStorage.getItem('token').length > 10;
+  const isAuthenticated = authService.isAuthenticated();
+  const userRole = authService.getRoles() || [];
 
     // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -47,20 +50,31 @@ export default function App() {
     }
   };
 
-
   // Setting page scroll to 0 when changing the route
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes, isAuthenticated) => {
+  const hasAccess = (itemRoles = []) => {
+    if (itemRoles.length === 0 || itemRoles.includes("PUBLIC")) {
+      return true;
+    } else if (isAuthenticated && (itemRoles.includes("ALL_USERS") || itemRoles.some(r => userRole.includes(r)))) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getRoutes = (allRoutes) => {
     return allRoutes.flatMap((route) => {
+      
       if (route.collapse) {
-        return getRoutes(route.collapse, isAuthenticated);
+        return hasAccess(route.roles) ? getRoutes(route.collapse, isAuthenticated) : null;
       }
 
       if (route.route && route.component) {
+
         const isAuthPage =
           route.route === "/authentication/login" ||
           route.route === "/authentication/register";
@@ -92,6 +106,10 @@ export default function App() {
     });
   };
 
+  const accessRoutes = (allRoutes) => {
+    return allRoutes.filter(r => r.roles ? hasAccess(r.roles) : true);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -101,7 +119,7 @@ export default function App() {
             color={sidenavColor}
             brand={brand}
             brandName="Saldo Planer"
-            routes={routes}
+            routes={accessRoutes(routes)}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -111,7 +129,7 @@ export default function App() {
       {layout === "vr" && <Configurator />}
       <NotifyProvider>
         <Routes>
-          {getRoutes(routes, isAuthenticated)}
+          {getRoutes(routes)}
           <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/authentication/login"} />} />
         </Routes>
       </NotifyProvider>

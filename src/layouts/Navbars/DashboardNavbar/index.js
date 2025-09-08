@@ -56,8 +56,7 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    authService.logout();
   };
 
   useEffect(() => {

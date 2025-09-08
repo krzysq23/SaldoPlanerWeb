@@ -21,8 +21,8 @@ class AuthService {
 
     const data: AuthResponse = await response.json();
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    this.setToken(data.token);
+    this.setUser(data.user);
     
     categoryService.updateCacheCategories();
 
@@ -62,10 +62,27 @@ class AuthService {
   }
 
   logout(): void {
+    this.clearUserData();
+    window.location.href = "/authentication/login";
+  }
+
+  sessionExpired(): void {
+    localStorage.setItem("APP_NOTIFY_MESSAGE_ERROR", "Twoja sesja wygasła. Zaloguj się ponownie");
+    this.logout();
+  }
+
+  clearUserData(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.setItem("APP_NOTIFY_MESSAGE_ERROR", "Twoja sesja wygasła. Zaloguj się ponownie");
-    window.location.href = "/authentication/session-expired";
+  }
+
+  setToken(token: string) {
+    localStorage.setItem("token", token);
+  }
+
+  setUser(user: object) {
+    const userEncoded = this.encodeBase64(JSON.stringify(user));
+    localStorage.setItem("user", userEncoded);
   }
 
   getToken(): string | null {
@@ -77,14 +94,33 @@ class AuthService {
     return user?.id ?? null;
   }
 
+  getRoles(): string[] | null {
+    const user = this.getCurrentUser();
+    return user?.roles ?? null;
+  }
+
   getCurrentUser(): AuthResponse["user"] | null {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
+    const userDecoded = this.decodeBase64(localStorage.getItem("user") || "");
+    return userDecoded ? JSON.parse(userDecoded) : null;
   }
 
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  encodeBase64(str: string): string {
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+  }
+
+  decodeBase64(base64: string): string {
+    const binary = atob(base64);
+    const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
 }
 
 const authService = new AuthService();
