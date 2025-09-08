@@ -12,7 +12,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import Header from "layouts/LayoutContainers/SettingsHeader";
 import Footer from "layouts/Footer";
 
 function AppSettings() {
@@ -21,7 +21,7 @@ function AppSettings() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <Header title="Ustawienia aplikacji" />
       <SoftBox py={3}>
         <Grid container>
 

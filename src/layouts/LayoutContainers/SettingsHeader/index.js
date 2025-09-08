@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 
+// prop-types is a library for typechecking of props
+import PropTypes from "prop-types";
+
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
@@ -16,17 +20,12 @@ import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import titleIcon from "assets/images/icons/user.png";
-import backgroundImage from "assets/images/curved-images/curved0.jpg";
+import settingsIcon from "assets/images/icons/settings.png";
+import backgroundImage from "assets/images/curved-images/curved11.jpg";
 
-import authService from "services/auth/authService";
-
-function Header() {
+function Header({ title = "Ustawienia", description = "", titleIcon = settingsIcon }) {
 
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
-  const user = authService.getCurrentUser();
-  const userName = user?.userName ?? "";
-  const roles = user?.roles.join(", ") ?? "";
 
   useEffect(() => {
 
@@ -78,7 +77,7 @@ function Header() {
           <Grid item>
             <SoftAvatar
               src={titleIcon}
-              alt="profile-image"
+              alt="title-image"
               variant="rounded"
               size="xl"
             />
@@ -86,10 +85,10 @@ function Header() {
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-                {userName}
+                {title}
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                {roles}
+                {description}
               </SoftTypography>
             </SoftBox>
           </Grid>
@@ -98,5 +97,11 @@ function Header() {
     </SoftBox>
   );
 }
+
+Header.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  titleIcon: PropTypes.string,
+};
 
 export default Header;

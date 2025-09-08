@@ -23,8 +23,10 @@ import breakpoints from "assets/theme/base/breakpoints";
 
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import Header from "layouts/LayoutContainers/SettingsHeader";
 import Footer from "layouts/Footer";
+
+import contactIcon from "assets/images/icons/contact.png";
 
 import clientService from "services/admin/clientService";
 import dataTableUtils from "utils/dataTableUtils";
@@ -118,7 +120,7 @@ function UserManager() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <Header title="Zarządzanie użytkownikami" titleIcon={contactIcon} />
       <SoftBox py={3}>
         <Card>
           <SoftBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
