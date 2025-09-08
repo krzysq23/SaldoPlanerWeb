@@ -7,6 +7,7 @@ import { useNotify } from "layouts/Notify";
 
 // @mui material components
 import Checkbox from "@mui/material/Checkbox";
+import Card from "@mui/material/Card";
 
 // Soft UI Dashboard PRO React components
 import SoftBox from "components/SoftBox";
@@ -16,10 +17,11 @@ import SoftButton from "components/SoftButton";
 import SoftSnackbar from "components/SoftSnackbar";
 
 // Authentication layout components
-import CoverLayout from "pages/authentication/components/CoverLayout";
+import BasicLayout from "pages/authentication/components/BasicLayout";
+import Socials from "pages/authentication/components/Socials";
 
 // Images
-import curved11 from "assets/images/curved-images/curved11.jpg";
+import backgroundImage from "assets/images/background-image-3.png";
 
 import authService from "services/auth/authService";
 
@@ -56,121 +58,131 @@ function Register() {
     };
 
   return (
-    <CoverLayout
-      title="Rejestracja w Saldo Planer"
+    <BasicLayout
+      title="Saldo Planer"
       description="Wprowadź swoje dany aby się zarejestrować"
-      image={curved11}
+      image={backgroundImage}
       top={12}
     >
-      <SoftBox component="form" role="form" onSubmit={handleSubmit}>
-        <SoftBox mb={2} lineHeight={1.25}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Imię i Nazwisko
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput 
-            name="name" 
-            placeholder="Imię i Nazwisko" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            inputProps={{
-              minlength: 3,
-              maxlength: 30,
-              pattern:"[a-zA-Z0-9\s]+"
-            }}
-            required
-            />
-        </SoftBox>
-        <SoftBox mb={2} lineHeight={1.25}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Login
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput 
-            name="login" 
-            placeholder="Login" 
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            inputProps={{
-              minlength: 3,
-              maxlength: 30,
-              pattern:"[a-zA-Z0-9\s]+"
-            }}
-            required
-            />
-        </SoftBox>
-        <SoftBox mb={2} lineHeight={1.25}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Email
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput 
-            name="email" 
-            type="email" 
-            placeholder="Email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            />
-        </SoftBox>
-        <SoftBox mb={2} lineHeight={1.25}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Hasło
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput 
-            name="password" 
-            type="password" 
-            placeholder="Hasło" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            inputProps={{
-              minlength: 4,
-              maxlength: 30
-            }}
-            required
-            />
-        </SoftBox>
-        <SoftBox display="flex" alignItems="center">
-          <Checkbox checked={agreement} onChange={handleSetAgremment} />
-          <SoftTypography
-            variant="button"
-            fontWeight="regular"
-            onClick={handleSetAgremment}
-            sx={{ cursor: "pointer", userSelect: "none" }}
-          >
-            &nbsp;&nbsp;Akceptuję&nbsp;
-          </SoftTypography>
-          <SoftTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
-            Regulamin
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox mt={4} mb={1}>
-          <SoftButton type="submit" variant="gradient" color="info" fullWidth>
+      <Card>
+        <SoftBox p={3} mb={1} textAlign="center">
+          <SoftTypography variant="h5" fontWeight="medium">
             Zarejestruj się
-          </SoftButton>
-        </SoftBox>
-        <SoftBox mt={3} textAlign="center">
-          <SoftTypography variant="button" color="text" fontWeight="regular">
-            Masz już konto?&nbsp;
-            <SoftTypography
-              component={Link}
-              to="/authentication/sign-in/cover"
-              variant="button"
-              color="info"
-              fontWeight="medium"
-              textGradient
-            >
-              Zaloguj się
-            </SoftTypography>
           </SoftTypography>
         </SoftBox>
-      </SoftBox>
-    </CoverLayout>
+        <SoftBox mb={2}>
+          <Socials />
+        </SoftBox>
+        <SoftBox component="form" role="form" p={3} onSubmit={handleSubmit}>
+          <SoftBox mb={2} lineHeight={1.25}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Imię i Nazwisko
+              </SoftTypography>
+            </SoftBox>
+            <SoftInput 
+              name="name" 
+              placeholder="Imię i Nazwisko" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              inputProps={{
+                minlength: 3,
+                maxlength: 30,
+                pattern:"[a-zA-Z0-9\s]+"
+              }}
+              required
+              />
+          </SoftBox>
+          <SoftBox mb={2} lineHeight={1.25}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Login
+              </SoftTypography>
+            </SoftBox>
+            <SoftInput 
+              name="login" 
+              placeholder="Login" 
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              inputProps={{
+                minlength: 3,
+                maxlength: 30,
+                pattern:"[a-zA-Z0-9\s]+"
+              }}
+              required
+              />
+          </SoftBox>
+          <SoftBox mb={2} lineHeight={1.25}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Email
+              </SoftTypography>
+            </SoftBox>
+            <SoftInput 
+              name="email" 
+              type="email" 
+              placeholder="Email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              />
+          </SoftBox>
+          <SoftBox mb={2} lineHeight={1.25}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Hasło
+              </SoftTypography>
+            </SoftBox>
+            <SoftInput 
+              name="password" 
+              type="password" 
+              placeholder="Hasło" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              inputProps={{
+                minlength: 4,
+                maxlength: 30
+              }}
+              required
+              />
+          </SoftBox>
+          <SoftBox display="flex" alignItems="center">
+            <Checkbox checked={agreement} onChange={handleSetAgremment} />
+            <SoftTypography
+              variant="button"
+              fontWeight="regular"
+              onClick={handleSetAgremment}
+              sx={{ cursor: "pointer", userSelect: "none" }}
+            >
+              &nbsp;&nbsp;Akceptuję&nbsp;
+            </SoftTypography>
+            <SoftTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
+              Regulamin
+            </SoftTypography>
+          </SoftBox>
+          <SoftBox mt={4} mb={1}>
+            <SoftButton type="submit" variant="gradient" color="info" fullWidth>
+              Zarejestruj się
+            </SoftButton>
+          </SoftBox>
+          <SoftBox mt={3} textAlign="center">
+            <SoftTypography variant="button" color="text" fontWeight="regular">
+              Masz już konto?&nbsp;
+              <SoftTypography
+                component={Link}
+                to="/authentication/sign-in/cover"
+                variant="button"
+                color="info"
+                fontWeight="medium"
+                textGradient
+              >
+                Zaloguj się
+              </SoftTypography>
+            </SoftTypography>
+          </SoftBox>
+        </SoftBox>
+      </Card>
+    </BasicLayout>
   );
 }
 
