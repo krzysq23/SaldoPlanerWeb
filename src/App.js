@@ -14,7 +14,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "assets/theme";
 
 // Images
-import brand from "assets/images/logo.png";
+import brand from "assets/images/app-logo.png";
 
 // Soft UI Dashboard PRO React contexts
 import { useSoftUIController, setMiniSidenav } from "context/index";
