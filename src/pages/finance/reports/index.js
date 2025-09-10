@@ -28,7 +28,9 @@ import DefaultLineChart from "layouts/Charts/LineCharts/DefaultLineChart";
 import { calendarDateOptions, typeOptions } from "pages/finance/transactions/schemas/options";
 import categoryStore from "services/category/categoryStore";
 
-import dashboardService from "services/dashboard/dashboardService";
+import { ReportReq, Report } from "types";
+import { formatYMD } from "utils/dateUtil";
+import reportsService from "services/reports/reportsService";
 import dataTableUtils from "utils/dataTableUtils";
 import dataChartUtil from "utils/dataChartUtil";
 
@@ -39,32 +41,31 @@ function Reports() {
   ))
   categoryOptions.unshift({ value: "ALL", label: "Wszystkie" })
 
-  const [ startDate, setStartDate ] = useState(new Date());
+  const [ startDate, setStartDate ] = useState(new Date(new Date().setDate(1)));
   const [ endDate, setEndDate ] = useState(new Date());
   const [ selectedCategory, setSelectedCategory ] = useState(categoryOptions[0]);
   const [ selectedType, setSelectedType ] = useState(typeOptions[0]);
   const [ tableData, setTableData ] = useState({ columns: [], rows: [] });
   const [ chartData, setChartData ] = useState([]);
-  const [ chartDataGraph, setChartDataGraph ] = useState([]);
+  const [ chartDataGraph, setChartDataGraph ] = useState({});
+  const [ lineChartData, setLineChartData ] = useState({});
   const [ totalIncomes, setTotalIncome ] = useState(0);
   const [ totalExpenses, setTotalExpense ] = useState(0);
   const [ balance, setBalance ] = useState(0);
   const { showSuccess, showError } = useNotify();
 
   useEffect(() => {
-    dashboardService
-        .getInfo()
-        .then((data) => {
-          setBalance(data.balance);
-          setTotalIncome(data.totalIncome);
-          setTotalExpense(data.totalExpense);
-          setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
-          setChartData(data.chartData);
-          setChartDataGraph(dataChartUtil.createTransactionsChartData(data.chartData));
-        })
-        .catch((err) => {
-          showError(err.message);
-        });
+
+    setChartData([{ categoryName: "Brak danych", color: "dark" }]);
+    setChartDataGraph({
+      labels: ["Brak danych"],
+      datasets: { label: "Brak danych", backgroundColors: ["dark"], data: [100], },
+    });
+    setLineChartData({
+      labels: ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
+      datasets: [],
+    });
+    setTableData(dataTableUtils.generateDashboardTransactionsTableData([]));
   }, []);
 
   const handleSetStartDate = (selectedDates) => {
@@ -76,7 +77,11 @@ function Reports() {
   };
 
   const handleSelectCategoryChange = (option) => {
-    setSelectedCategory(option);
+    if(option.filter(c => c.value === "ALL").length > 0) {
+      setSelectedCategory(categoryOptions[0]);
+    } else {
+      setSelectedCategory(option);
+    }
   };
 
   const handleSelectTypeChange = (option) => {
@@ -84,32 +89,57 @@ function Reports() {
   };
 
   const filterRaportClick = () => { 
-    console.log("filterRaportClick");
+    reportsService
+        .filter(getReportData())
+        .then((data) => {
+          setBalance(data.balance);
+          setTotalIncome(data.totalIncome);
+          setTotalExpense(data.totalExpense);
+          setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
+          setChartData(data.pieChartData);
+          setChartDataGraph(dataChartUtil.createTransactionsChartData(data.pieChartData));
+        })
+        .catch((err) => {
+          showError(err.message);
+        });
   }
 
   const generatePDFRaportClick = () => { 
-    console.log("generatePDFRaportClick");
+    if(tableData.length > 0) {
+      reportsService
+          .filter(getReportData())
+          .then((data) => {
+          })
+          .catch((err) => {
+            showError(err.message);
+          });
+    } else {
+      showError("Brak danych do wygenerowania raportu");
+    }
   }
 
   const generateCSVRaportClick = () => { 
-    console.log("generateCSVRaportClick");
+    if(tableData.length > 0) {
+      reportsService
+          .filter(getReportData())
+          .then((data) => {
+          })
+          .catch((err) => {
+            showError(err.message);
+          });
+    } else {
+      showError("Brak danych do wygenerowania raportu");
+    }
   }
 
-  const defaultLineChartData = {
-  labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  datasets: [
-    {
-      label: "Przychody",
-      color: "info",
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-    },
-    {
-      label: "Wydatki",
-      color: "dark",
-      data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-    }
-  ],
-};
+  function getReportData() {
+    return {
+      dateStart: formatYMD(startDate),
+      dateEnd: formatYMD(endDate),
+      categories: selectedCategory.value === "ALL" ? categoryOptions.filter((cat) => cat.value !== "ALL").map((cat) => cat.value) : selectedCategory.map((cat) => cat.value),
+      transactionType: selectedType.value,
+    };
+  }
 
   return (
     <DashboardLayout>
@@ -153,7 +183,8 @@ function Reports() {
                       Kategorie
                     </SoftTypography>
                   </SoftBox>
-                  <SoftSelect value={selectedCategory} options={categoryOptions} onChange={handleSelectCategoryChange} />
+                  <SoftSelect value={selectedCategory} options={categoryOptions} placeholder="Wybierz kategorię" 
+                    isMulti={true} onChange={handleSelectCategoryChange} />
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <SoftBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
@@ -191,10 +222,10 @@ function Reports() {
       </SoftBox>
       <SoftBox mb={3}>
         <Grid container spacing={3} alignItems="stretch">
-            <Grid item xs={12} sm={6} lg={6} sx={{ display: "flex" }}>
-              <Card>
+            <Grid item xs={12} sm={6} lg={6}>
+              <Card sx={{ height: "100%" }}>
                 <SoftBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
-                  <SoftTypography variant="h6">Wydatki wedłóg kategorii</SoftTypography>
+                  <SoftTypography variant="h6">Wydatki według kategorii</SoftTypography>
                 </SoftBox>
                 <SoftBox p={2} mt={3} mb={3}>
                   <Grid container alignItems="center">
@@ -204,8 +235,8 @@ function Reports() {
                     <Grid item xs={5}>
                       <SoftBox px={1}>
                         {chartData.map((data) => (
-                          <SoftBox mb={0.5} key={data.categoryName}>
-                            <SoftBadgeDot color={data.color} size="sm" badgeContent={data.categoryName} />
+                          <SoftBox mb={0.5} key={data.label}>
+                            <SoftBadgeDot color={data.color} size="sm" badgeContent={data.label} />
                           </SoftBox>
                         ))}
                       </SoftBox>
@@ -214,8 +245,8 @@ function Reports() {
                 </SoftBox>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={6} lg={6} sx={{ display: "flex" }}>
-              <DefaultLineChart title="Trend przychodów i wydatków" chart={defaultLineChartData} />
+            <Grid item xs={12} sm={6} lg={6} >
+              <DefaultLineChart title="Trend przychodów i wydatków" chart={lineChartData} />
             </Grid>
         </Grid>
       </SoftBox>

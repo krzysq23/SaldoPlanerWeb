@@ -114,8 +114,8 @@ function Default() {
                       <Grid item xs={5}>
                         <SoftBox px={1}>
                           {chartData.map((data) => (
-                            <SoftBox mb={0.5} key={data.categoryName}>
-                              <SoftBadgeDot color={data.color} size="sm" badgeContent={data.categoryName} />
+                            <SoftBox mb={0.5} key={data.label}>
+                              <SoftBadgeDot color={data.color} size="sm" badgeContent={data.label} />
                             </SoftBox>
                           ))}
                         </SoftBox>

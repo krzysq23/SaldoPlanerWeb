@@ -3,7 +3,7 @@ class DataChartUtil {
   createTransactionsChartData(transactions) {
 
     return {
-      labels: transactions.map(t => t.categoryName),
+      labels: transactions.map(t => t.label),
       datasets: {
         label: "Kategoria",
         backgroundColors: transactions.map(t => t.color),
