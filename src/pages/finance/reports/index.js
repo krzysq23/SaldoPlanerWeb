@@ -56,14 +56,12 @@ function Reports() {
 
   useEffect(() => {
 
-    setChartData([{ categoryName: "Brak danych", color: "dark" }]);
+    setChartData([{ label: "Brak danych", color: "dark" }]);
     setChartDataGraph({
-      labels: ["Brak danych"],
-      datasets: { label: "Brak danych", backgroundColors: ["dark"], data: [100], },
+      labels: ["Brak danych"], datasets: { label: "Brak danych", backgroundColors: ["dark"], data: [100], },
     });
     setLineChartData({
-      labels: ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
-      datasets: [],
+      labels: ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"], datasets: [],
     });
     setTableData(dataTableUtils.generateDashboardTransactionsTableData([]));
   }, []);
@@ -97,7 +95,9 @@ function Reports() {
           setTotalExpense(data.totalExpense);
           setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
           setChartData(data.pieChartData);
-          setChartDataGraph(dataChartUtil.createTransactionsChartData(data.pieChartData));
+          setChartDataGraph(dataChartUtil.createTransactionsPieChartData(data.pieChartData));
+          console.log(data.linearChartData);
+          setLineChartData(data.linearChartData);
         })
         .catch((err) => {
           showError(err.message);

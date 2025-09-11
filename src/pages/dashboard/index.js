@@ -44,7 +44,7 @@ function Default() {
           setTotalExpense(data.totalExpense);
           setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
           setChartData(data.chartData);
-          setChartDataGraph(dataChartUtil.createTransactionsChartData(data.chartData));
+          setChartDataGraph(dataChartUtil.createTransactionsPieChartData(data.chartData));
         })
         .catch((err) => {
           showError(err.message);

@@ -1,17 +1,28 @@
 class DataChartUtil {
 
-  createTransactionsChartData(transactions) {
+  createTransactionsPieChartData(data) {
 
     return {
-      labels: transactions.map(t => t.label),
+      labels: data.map(t => t.label),
       datasets: {
         label: "Kategoria",
-        backgroundColors: transactions.map(t => t.color),
-        data: transactions.map(t => t.percent),
+        backgroundColors: data.map(t => t.color),
+        data: data.map(t => t.percent),
       },
     };
   }
 
+  createTransactionsLinearChartData(data) {
+
+    return {
+      labels: data.map(t => t.label),
+      datasets: transactions.map((t) => ({
+        label: t.label,
+        color: t.color,
+        data: t.data,
+      })),
+    };
+  }
 }
 
 const dataChartUtil = new DataChartUtil();
