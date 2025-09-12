@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useMemo } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import routes from "routes/routes";
@@ -22,7 +21,8 @@ import { useSoftUIController, setMiniSidenav } from "context/index";
 // notify component
 import NotifyProvider from "layouts/Notify";
 
-import authService from "services/auth/authService";
+import { useAuth } from "context/auth";
+import { ProtectedRoute } from "routes/protectedRoute";
 
 export default function App() {
 
@@ -31,8 +31,11 @@ export default function App() {
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
 
-  const isAuthenticated = authService.isAuthenticated();
-  const userRole = authService.getRoles() || [];
+  const { isAuthenticated, loading, user } = useAuth();
+  const userRoles = useMemo(
+    () => (user?.roles ?? []),
+    [user]
+  );
 
     // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -57,57 +60,70 @@ export default function App() {
   }, [pathname]);
 
   const hasAccess = (itemRoles = []) => {
-    if (itemRoles.length === 0 || itemRoles.includes("PUBLIC")) {
+
+    if (itemRoles.length === 0 || itemRoles.includes("PUBLIC")) return true;
+
+    if (isAuthenticated && (itemRoles.includes("ALL_USERS") || itemRoles.some((r) => userRoles.includes(r)))) {
       return true;
-    } else if (isAuthenticated && (itemRoles.includes("ALL_USERS") || itemRoles.some(r => userRole.includes(r)))) {
-      return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
-  const getRoutes = (allRoutes) => {
-    return allRoutes.flatMap((route) => {
-      
+  const accessRoutes = (allRoutes) =>
+    allRoutes
+      .map((r) =>
+        r.collapse
+          ? { ...r, collapse: accessRoutes(r.collapse) }
+          : r
+      )
+      .filter((r) => (r.roles ? hasAccess(r.roles) : true));
+
+  const getRoutes = (allRoutes) =>
+    
+    allRoutes.flatMap((route) => {
       if (route.collapse) {
-        return hasAccess(route.roles) ? getRoutes(route.collapse, isAuthenticated) : null;
+        return hasAccess(route.roles) ? getRoutes(route.collapse) : [];
       }
 
       if (route.route && route.component) {
 
-        const isAuthPage =
-          route.route === "/authentication/login" ||
-          route.route === "/authentication/register";
+        const isAuthPage = route.route === "/authentication/login" || route.route === "/authentication/register";
 
-        if (isAuthenticated && isAuthPage) {
+        if (isAuthPage) {
           return (
             <Route
-              path={route.route}
-              element={<Navigate to="/dashboard" replace />}
               key={route.key}
+              path={route.route}
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" replace />
+                ) : (
+                  route.component
+                )
+              }
             />
           );
         }
 
-        if (!isAuthenticated && !isAuthPage) {
-          return (
-            <Route
-              path={route.route}
-              element={<Navigate to="/authentication/login" replace />}
-              key={route.key}
-            />
-          );
-        }
-
-        return <Route path={route.route} element={route.component} key={route.key} />;
+        return (
+          <Route
+            key={route.key}
+            path={route.route}
+            element={<ProtectedRoute>{route.component}</ProtectedRoute>}
+          />
+        );
       }
 
       return [];
     });
-  };
 
-  const accessRoutes = (allRoutes) => {
-    return allRoutes.filter(r => r.roles ? hasAccess(r.roles) : true);
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div style={{ padding: 24 }}>Ładowanie…</div>
+      </ThemeProvider>
+    );   
   }
 
   return (
@@ -127,14 +143,23 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
+
       <NotifyProvider>
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/authentication/login"} />} />
+          <Route
+            path="*"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Navigate to="/authentication/login" replace />
+              )
+            }
+          />
         </Routes>
       </NotifyProvider>
     </ThemeProvider>
-
   );
 
 }

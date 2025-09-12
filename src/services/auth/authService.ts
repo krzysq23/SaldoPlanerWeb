@@ -1,6 +1,7 @@
 import api from "../api";
 import { token } from "../token";
 import { LoginCredentials, AuthResponse, RegisterCredentials, ChangePassword, Response } from "types";
+import { authState } from "./authState";
 
 import categoryService from "../category/categoryService";
 
@@ -13,8 +14,10 @@ class AuthService {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     const response = await api.post(LOGIN_ENDPOINT, credentials);
-    token.set(response.data.token);
+    token.set(response.data.accessToken);
     this.setUser(response.data.user);
+    authState.setIsAuthenticated(true);
+    authState.setUser(response.data.user);
     categoryService.updateCacheCategories();
     return response.data;
   }
@@ -35,22 +38,24 @@ class AuthService {
     } finally {
       this.clearUserData();
       token.clear();
+      authState.setIsAuthenticated(false);
+      authState.setUser(null);
       window.location.href = "/login";
     }
   }
 
   sessionExpired(): void {
-    localStorage.setItem("APP_NOTIFY_MESSAGE_ERROR", "Twoja sesja wygasła. Zaloguj się ponownie");
+    sessionStorage.setItem("APP_NOTIFY_MESSAGE_ERROR", "Twoja sesja wygasła. Zaloguj się ponownie");
     this.logout();
   }
 
   clearUserData(): void {
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
   }
 
   setUser(user: object) {
     const userEncoded = this.encodeBase64(JSON.stringify(user));
-    localStorage.setItem("user", userEncoded);
+    sessionStorage.setItem("user", userEncoded);
   }
 
   getToken(): string | null {
@@ -68,7 +73,7 @@ class AuthService {
   }
 
   getCurrentUser(): AuthResponse["user"] | null {
-    const userDecoded = this.decodeBase64(localStorage.getItem("user") || "");
+    const userDecoded = this.decodeBase64(sessionStorage.getItem("user") || "");
     return userDecoded ? JSON.parse(userDecoded) : null;
   }
 

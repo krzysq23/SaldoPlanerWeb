@@ -2,10 +2,10 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import authService from "./auth/authService";
 import { token } from "./token";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const REFRESH_ENDPOINT = process.env.REACT_APP_TOKEN_REFRESH_ENDPOINT ?? "/auth/refresh";
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
 });
 
@@ -32,11 +32,7 @@ function notifyQueue(newToken: string | null) {
 }
 
 async function refreshAccessToken(): Promise<string> {
-  const res = await axios.post(
-    `${api.defaults.baseURL}${process.env.REACT_APP_TOKEN_REFRESH_ENDPOINT}`,
-    {},
-    { withCredentials: true }
-  );
+  const res = await api.get(REFRESH_ENDPOINT);
   const newAccess = res.data?.accessToken;
   if (!newAccess) throw new Error("Brak accessToken w odpowiedzi /refresh");
   token.set(newAccess);
