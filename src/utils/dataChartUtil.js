@@ -12,17 +12,6 @@ class DataChartUtil {
     };
   }
 
-  createTransactionsLinearChartData(data) {
-
-    return {
-      labels: data.map(t => t.label),
-      datasets: transactions.map((t) => ({
-        label: t.label,
-        color: t.color,
-        data: t.data,
-      })),
-    };
-  }
 }
 
 const dataChartUtil = new DataChartUtil();

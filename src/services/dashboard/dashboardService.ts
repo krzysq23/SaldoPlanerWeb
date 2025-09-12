@@ -1,23 +1,12 @@
-import { Dashboard } from "types";
+import api from "../api";
 
-import { handleResponse } from "../utils/apiHandler";
-
-const API_URL = process.env.REACT_APP_API_URL;
+const DASHBOARD_INFO_ENDPOINT = process.env.REACT_APP_DASHBOARD_INFO_ENDPOINT ?? "";
   
 class DashboardService {
 
-  async getInfo(): Promise<Dashboard[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_DASHBOARD_INFO_ENDPOINT, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    await handleResponse(response, "Błąd podczas pobierania");
-
-    return await response.json();
+  async getInfo() {
+    const response = await api.get(DASHBOARD_INFO_ENDPOINT);
+    return response.data;
   }
 
 }

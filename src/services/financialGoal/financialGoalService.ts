@@ -1,70 +1,31 @@
-import { FinancialGoal, Response } from "types";
+import api from "../api";
+import { FinancialGoal } from "types";
 
-import { handleResponse } from "../utils/apiHandler";
-
-import authService from "../auth/authService";
-
-const API_URL = process.env.REACT_APP_API_URL;
+const FINANCIAL_GOAL_BY_DATE_ENDPOINT = process.env.REACT_APP_FINANCIAL_GOAL_BY_DATE_ENDPOINT ?? "";
+const FINANCIAL_GOAL_ADD_ENDPOINT = process.env.REACT_APP_FINANCIAL_GOAL_ADD_ENDPOINT ?? "";
+const FINANCIAL_GOAL_REMOVE_ENDPOINT = process.env.REACT_APP_FINANCIAL_GOAL_REMOVE_ENDPOINT ?? "";
+const FINANCIAL_GOAL_EDIT_ENDPOINT = process.env.REACT_APP_FINANCIAL_GOAL_EDIT_ENDPOINT ?? "";
   
 class FinancialGoalService {
 
-  async getAllFinancialGoals(): Promise<FinancialGoal[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_BY_DATE_ENDPOINT, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    await handleResponse(response, "Błąd podczas pobierania celów finansowych");
-
-    return await response.json();
+  async getAllFinancialGoals() {
+    const response = await api.get(FINANCIAL_GOAL_BY_DATE_ENDPOINT);
+    return response.data;
   }
 
-  async addFinancialGoal(financialGoal: FinancialGoal): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_ADD_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(financialGoal)
-    });
-
-    await handleResponse(response, "Błąd podczas dodawania celu finansowego");
-
-    return await response.json();
+  async addFinancialGoal(financialGoal: FinancialGoal) {
+    const response = await api.post(FINANCIAL_GOAL_ADD_ENDPOINT, financialGoal);
+    return response.data;
   }
 
-  async removeFinancialGoal(financialGoal: FinancialGoal): Promise<FinancialGoal[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_REMOVE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(financialGoal)
-    });
-
-    await handleResponse(response, "Błąd podczas usuwania transakcji");
-
-    return await response.json();
+  async removeFinancialGoal(financialGoal: FinancialGoal){
+    const response = await api.post(FINANCIAL_GOAL_REMOVE_ENDPOINT, financialGoal);
+    return response.data;
   }
 
-  async editFinancialGoal(financialGoal: FinancialGoal): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_FINANCIAL_GOAL_EDIT_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(financialGoal)
-    });
-
-    await handleResponse(response, "Błąd podczas edycji celu finansowego");
-
-    return await response.json();
+  async editFinancialGoal(financialGoal: FinancialGoal) {
+    const response = await api.post(FINANCIAL_GOAL_EDIT_ENDPOINT, financialGoal);
+    return response.data;
   }
 
 }

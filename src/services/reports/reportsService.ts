@@ -1,39 +1,36 @@
-import { ReportReq, Report } from "types";
+import api from "../api";
+import { ReportReq } from "types";
 
-import { handleResponse } from "../utils/apiHandler";
+const REPORTS_FILTER_ENDPOINT = process.env.REACT_APP_REPORTS_FILTER_ENDPOINT ?? "";
+const REPORTS_GENERATE_ENDPOINT = process.env.REACT_APP_REPORTS_GENERATE_ENDPOINT ?? "";
 
-const API_URL = process.env.REACT_APP_API_URL;
-  
 class ReportsService {
 
-  async filter(data: ReportReq): Promise<Report> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_REPORTS_FILTER_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(data)
-    });
-
-    await handleResponse(response, "Błąd podczas pobierania");
-
-    return await response.json();
+  async filter(data: ReportReq) {
+    const response = await api.post(REPORTS_FILTER_ENDPOINT, data);
+    return response.data;
   }
 
-  async generate(data: ReportReq): Promise<Report> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_REPORTS_GENERATE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(data)
+  async generate(data: ReportReq) {
+    const response = await api.post(REPORTS_GENERATE_ENDPOINT, data, {
+      responseType: "blob"
     });
 
-    await handleResponse(response, "Błąd podczas generowania raportu");
+    const cd = response.headers["content-disposition"] || "";
+    const fileNameMatch = cd.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+    const fileName = fileNameMatch?.[1] ?? "report.pdf";
 
-    return await response.json();
+    const blob = response.data;
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
   }
 
 }

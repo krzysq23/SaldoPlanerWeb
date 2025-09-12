@@ -4,7 +4,7 @@ export async function handleResponse(response: Response, message: String): Promi
 
   if (response.status === 401) {
     const data = await response.json();
-    if (data.message && data.message.includes("Sesja wygasła")) {
+    if (data.message && (data.message.includes("TOKEN_EXPIRED") || data.message.includes("TOKEN_NOT_VALID"))) {
         authService.sessionExpired();
     }
   }

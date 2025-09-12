@@ -105,28 +105,16 @@ function Reports() {
   }
 
   const generatePDFRaportClick = () => { 
-    if(tableData.length > 0) {
-      reportsService
-          .filter(getReportData())
-          .then((data) => {
-          })
-          .catch((err) => {
-            showError(err.message);
-          });
+    if(tableData.rows.length > 0) {
+      reportsService.generate(getReportData(), "PDF");
     } else {
       showError("Brak danych do wygenerowania raportu");
     }
   }
 
   const generateCSVRaportClick = () => { 
-    if(tableData.length > 0) {
-      reportsService
-          .filter(getReportData())
-          .then((data) => {
-          })
-          .catch((err) => {
-            showError(err.message);
-          });
+    if(tableData.rows.length > 0) {
+      reportsService.generate(getReportData(), "CSV");
     } else {
       showError("Brak danych do wygenerowania raportu");
     }

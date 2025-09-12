@@ -1,69 +1,42 @@
+import api from "../api";
+import { token } from "../token";
 import { LoginCredentials, AuthResponse, RegisterCredentials, ChangePassword, Response } from "types";
-
-import { handleResponse } from "../utils/apiHandler";
 
 import categoryService from "../category/categoryService";
 
-const API_URL = process.env.REACT_APP_API_URL;
-  
+const LOGIN_ENDPOINT = process.env.REACT_APP_LOGIN_ENDPOINT ?? "";
+const REGISTER_ENDPOINT = process.env.REACT_APP_REGISTER_ENDPOINT ?? "";
+const LOGOUT_ENDPOINT = process.env.REACT_APP_LOGOUT_ENDPOINT ?? "";
+const CHANGE_PASSWORD_ENDPOINT = process.env.REACT_APP_PASSSWORD_CHANGE_ENDPOINT ?? "";
+
 class AuthService {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_LOGIN_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    await handleResponse(response, "Błąd logowania");
-
-    const data: AuthResponse = await response.json();
-
-    this.setToken(data.token);
-    this.setUser(data.user);
-    
+    const response = await api.post(LOGIN_ENDPOINT, credentials);
+    token.set(response.data.token);
+    this.setUser(response.data.user);
     categoryService.updateCacheCategories();
-
-    return data;
+    return response.data;
   }
 
   async register(credentials: RegisterCredentials): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_REGISTER_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    await handleResponse(response, "Błąd przy tworzeniu konta");
-
-    const data: Response = await response.json();
-
-    return data;
+    const response = await api.post(REGISTER_ENDPOINT, credentials);
+    return response.data;
   }
 
   async changePassword(credentials: ChangePassword): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_PASSSWORD_CHANGE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    await handleResponse(response, "Błąd przy zmianie hasła");
-
-    const data: Response = await response.json();
-
-    return data;
+    const response = await api.post(CHANGE_PASSWORD_ENDPOINT, credentials);
+    return response.data;
   }
 
-  logout(): void {
-    this.clearUserData();
-    window.location.href = "/authentication/login";
+  async logout() {
+    try {
+      await api.post(LOGOUT_ENDPOINT);
+    } finally {
+      this.clearUserData();
+      token.clear();
+      window.location.href = "/login";
+    }
   }
 
   sessionExpired(): void {
@@ -72,12 +45,7 @@ class AuthService {
   }
 
   clearUserData(): void {
-    localStorage.removeItem("token");
     localStorage.removeItem("user");
-  }
-
-  setToken(token: string) {
-    localStorage.setItem("token", token);
   }
 
   setUser(user: object) {
@@ -86,7 +54,7 @@ class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem("token");
+    return token.get();
   }
 
   getUserId(): number | null {

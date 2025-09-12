@@ -22,7 +22,6 @@
     "install:peer-deps": "npm install --legacy-peer-deps"
   },
   "dependencies": {
-    "typescript": "^5.9.2",
     "@asseinfo/react-kanban": "2.2.0",
     "@emotion/cache": "11.13.1",
     "@emotion/react": "11.13.0",
@@ -42,6 +41,7 @@
     "@testing-library/user-event": "14.5.2",
     "@three-ts/orbit-controls": "1.4.7",
     "ajv": "^8.17.1",
+    "axios": "^1.12.0",
     "chart.js": "3.9.1",
     "chroma-js": "2.4.2",
     "draft-convert": "^2.1.13",
@@ -70,6 +70,7 @@
     "stylis-plugin-rtl": "2.1.1",
     "sweetalert2": "11.12.4",
     "three": "0.121.1",
+    "typescript": "^5.9.2",
     "uuid": "9.0.0",
     "vanilla-tilt": "1.8.1",
     "web-vitals": "3.3.1",

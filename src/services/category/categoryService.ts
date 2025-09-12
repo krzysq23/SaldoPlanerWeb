@@ -1,10 +1,11 @@
-import { Category, Response } from "types";
-
-import { handleResponse } from "../utils/apiHandler";
-
+import api from "../api";
+import { Category } from "types";
 import categoryStore from "./categoryStore";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const CATEGORY_ALL_ENDPOINT = process.env.REACT_APP_CATEGORY_ALL_ENDPOINT ?? "";
+const CATEGORY_ADD_ENDPOINT = process.env.REACT_APP_CATEGORY_ADD_ENDPOINT ?? "";
+const CATEGORY_REMOVE_ENDPOINT = process.env.REACT_APP_CATEGORY_REMOVE_ENDPOINT ?? "";
+const CATEGORY_EDIT_ENDPOINT = process.env.REACT_APP_CATEGORY_EDIT_ENDPOINT ?? "";
  
 class CategoryService {
 
@@ -20,68 +21,25 @@ class CategoryService {
   }
 
   async getAllCategories(): Promise<Category[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_ALL_ENDPOINT, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    await handleResponse(response, "Błąd podczas pobierania kategorii");
-
-    return await response.json();
+    const response = await api.get(CATEGORY_ALL_ENDPOINT);
+    return response.data;
   }
 
   async addCategory(category: Category): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_ADD_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(category)
-    });
-
-    await handleResponse(response, "Błąd podczas dodawania kategorii");
-
-    await this.updateCacheCategories();
-
-    return await response.json();
+    const response = await api.post(CATEGORY_ADD_ENDPOINT, category);
+    return response.data;
   }
 
   async removeCategory(category: Category): Promise<Category[]> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_REMOVE_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(category)
-    });
-
-    await handleResponse(response, "Błąd podczas usuwania kategorii");
-
+    const response = await api.post(CATEGORY_REMOVE_ENDPOINT, category);
     await this.updateCacheCategories();
-
-    return await response.json();
+    return response.data;
   }
 
   async editCategory(category: Category): Promise<Response> {
-    const response = await fetch(`${API_URL}` + process.env.REACT_APP_CATEGORY_EDIT_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(category)
-    });
-
-    await handleResponse(response, "Błąd podczas edycji kategorii");
-
+    const response = await api.post(CATEGORY_EDIT_ENDPOINT, category);
     await this.updateCacheCategories();
-
-    return await response.json();
+    return response.data;
   }
 
 }
