@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await api.get(process.env.REACT_APP_TOKEN_REFRESH_ENDPOINT);
+        const res = await api.get(process.env.REACT_APP_STATUS_ENDPOINT);
         const newAccess = res.data?.accessToken;
         if (newAccess) {
           token.set(newAccess);
