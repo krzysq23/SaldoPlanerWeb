@@ -17,10 +17,6 @@ class ReportsService {
       responseType: "blob"
     });
 
-    for (const [key, value] of Object.entries(response.headers)) {
-  console.log(key, value);
-}
-
     await downloadBlobResponse(response.data, response.headers, format, "report");
   }
 
