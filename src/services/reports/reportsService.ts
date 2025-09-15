@@ -1,5 +1,6 @@
-import api from "../api";
+import api from "services/api";
 import { ReportReq } from "types";
+import { downloadBlobResponse } from "utils/downloadUtil";
 
 const REPORTS_FILTER_ENDPOINT = process.env.REACT_APP_REPORTS_FILTER_ENDPOINT ?? "";
 const REPORTS_GENERATE_ENDPOINT = process.env.REACT_APP_REPORTS_GENERATE_ENDPOINT ?? "";
@@ -11,26 +12,16 @@ class ReportsService {
     return response.data;
   }
 
-  async generate(data: ReportReq) {
-    const response = await api.post(REPORTS_GENERATE_ENDPOINT, data, {
+  async generate(data: ReportReq, format: "pdf" | "csv" | "xlsx") {
+    const response = await api.post(`${REPORTS_GENERATE_ENDPOINT}/${format}`, data, {
       responseType: "blob"
     });
 
-    const cd = response.headers["content-disposition"] || "";
-    const fileNameMatch = cd.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
-    const fileName = fileNameMatch?.[1] ?? "report.pdf";
+    for (const [key, value] of Object.entries(response.headers)) {
+  console.log(key, value);
+}
 
-    const blob = response.data;
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-
+    await downloadBlobResponse(response.data, response.headers, format, "report");
   }
 
 }

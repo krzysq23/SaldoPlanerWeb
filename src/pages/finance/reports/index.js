@@ -96,7 +96,6 @@ function Reports() {
           setTableData(dataTableUtils.generateDashboardTransactionsTableData(data.transactions));
           setChartData(data.pieChartData);
           setChartDataGraph(dataChartUtil.createTransactionsPieChartData(data.pieChartData));
-          console.log(data.linearChartData);
           setLineChartData(data.linearChartData);
         })
         .catch((err) => {
@@ -106,7 +105,11 @@ function Reports() {
 
   const generatePDFRaportClick = () => { 
     if(tableData.rows.length > 0) {
-      reportsService.generate(getReportData(), "PDF");
+      reportsService
+        .generate(getReportData(), "pdf")
+        .catch((err) => {
+          showError(err.message);
+        });
     } else {
       showError("Brak danych do wygenerowania raportu");
     }
@@ -114,7 +117,11 @@ function Reports() {
 
   const generateCSVRaportClick = () => { 
     if(tableData.rows.length > 0) {
-      reportsService.generate(getReportData(), "CSV");
+      reportsService
+        .generate(getReportData(), "csv")
+        .catch((err) => {
+          showError(err.message);
+        });
     } else {
       showError("Brak danych do wygenerowania raportu");
     }
