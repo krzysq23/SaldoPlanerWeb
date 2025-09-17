@@ -21,6 +21,8 @@ import { useSoftUIController, setMiniSidenav } from "context/index";
 // notify component
 import NotifyProvider from "layouts/Notify";
 
+import Loading from "pages/loading";
+
 import { useAuth } from "context/auth";
 import { ProtectedRoute } from "routes/protectedRoute";
 
@@ -121,7 +123,7 @@ export default function App() {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div style={{ padding: 24 }}>Ładowanie…</div>
+        <Loading />
       </ThemeProvider>
     );   
   }
