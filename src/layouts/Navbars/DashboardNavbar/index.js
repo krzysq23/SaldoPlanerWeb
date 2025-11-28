@@ -103,26 +103,34 @@ function DashboardNavbar({ absolute = false, light = false, isMini = false }) {
       sx={{ mt: 2 }}
     >
       <NotificationItem
-        image={<img src={team2} alt="person" />}
-        title={["New message", "from Laur"]}
-        date="13 minutes ago"
+        image={
+          <Icon fontSize="small" sx={{ color: ({ palette: { white } }) => white.main }}>
+            payments
+          </Icon>
+        }
+        title={["Wydatki:", "paliwo do samochodu"]}
+        date="1 dzień temu"
         onClick={handleCloseMenu}
       />
       <NotificationItem
-        image={<img src={logoSpotify} alt="person" />}
-        title={["New album", "by Travis Scott"]}
-        date="1 day"
+        image={
+          <Icon fontSize="small" sx={{ color: ({ palette: { white } }) => white.main }}>
+            payments
+          </Icon>
+        }
+        title={["Wydatki:", "prezenty świąteczne"]}
+        date="2 dni temu"
         onClick={handleCloseMenu}
       />
       <NotificationItem
         color="secondary"
         image={
           <Icon fontSize="small" sx={{ color: ({ palette: { white } }) => white.main }}>
-            payment
+            wallet
           </Icon>
         }
-        title={["", "Payment successfully completed"]}
-        date="2 days"
+        title={["", "Dodano nowe środki do Twojego konta"]}
+        date="2 dni temu"
         onClick={handleCloseMenu}
       />
     </Menu>
