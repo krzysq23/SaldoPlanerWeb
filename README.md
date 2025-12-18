@@ -145,5 +145,5 @@ npm test
 
 ### 🔗 Related Projects
 
-- XSWareAPI – Backend API (Spring Boot, Java)
-- XSWareDBService – Database service (Kotlin, Spring Boot)
+- **XSWareAPI** – Backend API (Spring Boot, Java)
+- **XSWareDBService** – Database service (Kotlin, Spring Boot)
